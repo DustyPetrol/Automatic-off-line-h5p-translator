@@ -83,26 +83,29 @@ def translate_json_fields(data, translator_func, log_callback, translated_flags=
     if isinstance(data, dict):
         for key, value in data.items():
             path = f"{current_path}/{key}"
-
             if path in translated_flags:
                 continue
 
             if key == "answers" and isinstance(value, list):
                 for idx, answer in enumerate(value):
+                    answer_path = f"{path}[{idx}]"
                     if isinstance(answer, dict) and "text" in answer:
                         orig = answer["text"]
+                        sub_path = f"{answer_path}/text"
+                        if sub_path in translated_flags:
+                            continue
                         if isinstance(orig, str) and orig.strip():
                             try:
                                 translated = translator_func(orig)
                                 answer["text"] = translated
-                                translated_flags.add(f"{path}[{idx}]/text")
+                                translated_flags.add(sub_path)
                                 log_callback(f"[Answer] {orig.strip()} → {translated.strip()}")
                             except Exception as e:
                                 log_callback(f"[Error] Translating answer[{idx}] failed: {orig[:40]}... ({e})")
-
-            elif isinstance(value, (dict, list)):
+                    elif isinstance(answer, (dict, list)):
+                        translate_json_fields(answer, translator_func, log_callback, translated_flags, answer_path)
+            elif isinstance(value, dict) or isinstance(value, list):
                 translate_json_fields(value, translator_func, log_callback, translated_flags, path)
-
             elif key in translatable_keys and isinstance(value, str) and value.strip():
                 try:
                     if "<" in value and ">" in value:
@@ -110,24 +113,24 @@ def translate_json_fields(data, translator_func, log_callback, translated_flags=
                     else:
                         translated = translator_func(value)
                         log_callback(f"{value.strip()} → {translated.strip()}")
-
                     data[key] = translated
                     translated_flags.add(path)
-
                 except Exception as e:
                     log_callback(f"[WARN] Couldn't translate {key} at {path}: {e}")
 
     elif isinstance(data, list):
-        for i, item in enumerate(data):
+        for idx, item in enumerate(data):
+            path = f"{current_path}[{idx}]"
             if isinstance(item, (dict, list)):
-                translate_json_fields(item, translator_func, log_callback)
-            elif isinstance(item, str):
+                translate_json_fields(item, translator_func, log_callback, translated_flags, path)
+            elif isinstance(item, str) and path not in translated_flags:
                 try:
                     translated = translator_func(item)
                     log_callback(f"{item.strip()} → {translated.strip()}")
-                    data[i] = translated
+                    data[idx] = translated
+                    translated_flags.add(path)
                 except Exception as e:
-                    log_callback(f"[WARN] Couldn't translate list item: {e}")
+                    log_callback(f"[WARN] Couldn't translate list item at {path}: {e}")
 
 def translate_h5p(input_h5p, output_h5p, log_callback, export_raw=False):
     temp_dir = "temp_h5p"

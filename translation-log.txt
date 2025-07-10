@@ -1,0 +1,787 @@
+Translating file: C:/Users/uleru/Documents/For Moodle course/translations folder/the translations/PythonApplication1/main/freshman-laboratory-safety.h5p
+[OK] Extracted H5P
+[INFO] Starting translation...
+Image → Bild
+Freshman laboratory safety → Freshman Laborsicherheit
+[Block] Welcome to the HSHL lab safety course! → Welcome to the HSHL Lab safety course!
+[Block] In this course, we will guide you through the important safety rules for working in our labs. → In diesem Kurs führen wir Sie durch die wichtigen Sicherheitsregeln für die Arbe
+[Block] To pass the course, you need to answer all the questions correctly. → Um den Kurs durchzuführen, müssen Sie alle Fragen richtig beantworten.
+[Block] Each lab has special instructions that you need to know before using the lab. Without understanding these instructions, you cannot work in the lab. → Jedes Lab hat besondere Anweisungen, die Sie vor der Verwendung des Labors wisse
+[Block] Please make sure you follow all the instructions carefully. This helps keep everyone safe, including students and teachers. → Bitte stellen Sie sicher, dass Sie alle Anweisungen sorgfältig folgen. Dies hilf
+Introduction → Einführung
+Basic Lab Safety Intro Course → Grundlagen Lab Safety Intro Kurs
+[Block] Goals of the Basic Lab Rules: → Die Ziele der Grundlaborregeln:
+Goals title → Ziel Titel
+Image → Bild
+lab picture → Laborbild
+[Block] Goals of the Basic Lab Rules: → Die Ziele der Basic Lab Regeln:
+[Block] Ensure the health and safety of everyone in the lab
+Prevent accidents
+Support effective use of the lab for both research and teaching
+Minimize environmental impact
+Ensure economical use of lab resources → Sorgt die Gesundheit und Sicherheit of alle in der Lab Verhindern Unfälle Suppor
+[Block] Ensure the health and safety of everyone in the lab → Sorgt die Gesundheit und Sicherheit of alle in der Lab
+[Block] Prevent accidents → Verhindern Unfälle
+[Block] Support effective use of the lab for both research and teaching → Support effektiv Nutzung des Labors für Forschung und Lehre
+[Block] Minimize environmental impact → Umweltbelastung minimieren Effekt
+[Block] Ensure economical use of lab resources → Sorgt für die wirtschaftliche Nutzung von  Lab Resources
+Goals body → Zielkörper
+Goals → Ziele
+Image → Bild
+Access to the laboratory only with valid safety instruction! → Zugang zum Labor nur mit gültiger Sicherheitsanweisung!
+Access to the laboratory → Zugang zum Labor
+[Block] Permission to Work in the Lab → Erlaubnis zur Arbeit im Lab
+[Block] Only people who have been authorized and instructed can work in the lab.
+Each lab has a designated professor who is responsible for the lab and its safety. You can get their contact information outside the lab on the sing next to the door.
+This professor sets and updates specific lab rules.
+If necessary, the responsible professor can restrict access to the lab.
+Unsupervised experiments must be set up to ensure they pose no risk or danger. → nur diejenigen, die autorisiert und unterrichtet wurden, können im Labor arbeite
+[Block] Only people who have been authorized and instructed can work in the lab. → nur diejenigen, die autorisiert und unterrichtet wurden, können im Labor arbeite
+[Block] Each lab has a designated professor who is responsible for the lab and its safety. You can get their contact information outside the lab on the sing next to the door. → Jedes Lab hat einen benannten Professor, der für das Lab und seine Sicherheit ve
+[Block] This professor sets and updates specific lab rules. → Dieser Professor setzt und aktualisiert spezifische Laborregeln.
+[Block] If necessary, the responsible professor can restrict access to the lab. → Wenn erforderlich, kann der verantwortliche Professor den Zugang zum Labor besch
+[Block] Unsupervised experiments must be set up to ensure they pose no risk or danger. → Unkontrollierte Experimente müssen eingerichtet werden, um sicherzustellen, dass
+Authorized and instructed people → Autorisierte und instruierte Menschen
+[Answer] <div>It is required for a student to be well instructed and not prohibited by a responsible professor.</div> → <div>Es ist notwendig, dass ein Schüler gut unterrichtet und nicht von einem verantwortungsvollen Professor verboten wird.</div>
+[Answer] <div>It is required for a student to be enrolled in HSHL.</div> → <div>Es ist erforderlich, dass ein Student in HSHL eingetragen wird.</div>
+[Answer] <div>It is required for a student to be a professor.</div> → <div>Es ist notwendig, dass ein Student ein Professor ist.</div>
+[Answer] <div>It is required for a students project deadline to be very soon.</div> → <div>Es ist erforderlich, dass eine Studentenprojektfrist sehr bald sein wird.</div>
+[Block] What is required for a student to work in the laboratory? → Was ist für einen Schüler erforderlich, um im Labor zu arbeiten?
+Work in a student center → Arbeiten in einem Studentenzentrum
+[Answer] <div>When it is constructed in a way that guarantees that there is no danger.</div> → <div>Wenn es auf eine Art und Weise gebaut wird, die garantiert, dass es keine Gefahr gibt.</div>
+[Answer] <div>When it will run unsupervised for less than 24 hours.</div> → <div>Wenn es nicht überwacht für weniger als 24 Stunden läuft.</div>
+[Answer] <div>When it will run unsupervised for less than 2 hours.</div> → <div>Wenn es nicht überwacht für weniger als 2 Stunden läuft.</div>
+[Answer] <div>When it is dangerous to supervise.</div> → <div>Wenn es gefährlich ist, zu überwachen.</div>
+[Block] When can you leave an experiment unsupervised? → Wenn können Sie ein Experiment unkontrolliert lassen?
+Unsupervised experiments → Unkontrollierte Experimente
+Permission to work in the lab → Erlaubnis zur Arbeit im Lab
+Permissions → Genehmigungen
+Image → Bild
+AGUM → Agum
+[Block] At HSHL, students are treated similarly to employees in matters of work safety and health. This means you have both rights and responsibilities. → An HSHL werden Studenten in Bezug auf Arbeitssicherheit und Gesundheit ähnlich b
+[Block] Your Rights: → Deine Rechte:
+[Block] You have the right to suggest safety improvements to your professor, internship supervisor, or other relevant contacts.
+If internal options are exhausted, you may contact external authorities, such as management, occupational safety professionals, or staff councils. → Sie haben das Recht, Sicherheitsverbesserungen an Ihren Lehrer, Praktikumsbeauft
+[Block] You have the right to suggest safety improvements to your professor, internship supervisor, or other relevant contacts. → Sie haben das Recht, Sicherheitsverbesserungen an Ihren Lehrer, Praktikumsbeauft
+[Block] If internal options are exhausted, you may contact external authorities, such as management, occupational safety professionals, or staff councils. → Wenn die internen Optionen ausgeschöpft sind, können Sie sich mit externen Behör
+[Block] Your Obligations: → Ihre Verpflichtungen:
+[Block] Participate in all required safety training.
+Follow all safety instructions, such as operating guidelines.
+Refuse any task or instruction that feels unsafe.
+Take responsibility for your own safety and health.
+Ensure that your actions do not endanger other members of the institution.
+Use machines, tools, and equipment safely and correctly.
+Properly use protective gear and immediately report any issues with the safety systems.
+Always wear your personal protective equipment (PPE) correctly.
+Report any immediate or significant safety hazards to your contact person as soon as possible. → Beteiligung an allen erforderlichen Sicherheitstraining. Folgen Sie alle Sicherh
+[Block] Participate in all required safety training. → Beteiligung an allen erforderlichen Sicherheitstraining.
+[Block] Follow all safety instructions, such as operating guidelines. → Verfolgen Sie alle Sicherheitsanweisungen, z. B. Betriebsrichtlinien.
+[Block] Refuse any task or instruction that feels unsafe. → Verweigert jede Aufgabe oder Anweisung, die sich unsicher fühlt.
+[Block] Take responsibility for your own safety and health. → Verantwortlich für Ihre eigene Sicherheit und Gesundheit.
+[Block] Ensure that your actions do not endanger other members of the institution. → Vergewissern Sie sich, dass Ihre Handlungen andere Mitglieder der Institution ni
+[Block] Use machines, tools, and equipment safely and correctly. → Verwendung von Maschinen, Werkzeugen und Ausrüstungen sicher und korrekt.
+[Block] Properly use protective gear and immediately report any issues with the safety systems. → Schutzgeräte ordnungsgemäß verwenden und alle Probleme mit den Sicherheitssystem
+[Block] Always wear your personal protective equipment (PPE) correctly. → Sie tragen immer Ihre persönliche Schutzgeräte (PPE) richtig.
+[Block] Report any immediate or significant safety hazards to your contact person as soon as possible. → Bericht alle unmittelbaren oder signifikanten Sicherheitsgefahren für Ihre Konta
+[Block] For further details, visit HSHL Safety Information, where you can also find information on: → für weitere Details besuchen Sie HSHL Sicherheitsinformationen, wo Sie auch Info
+[Block] Safety and ergonomics
+Important phone numbers
+Guidelines and rules → Sicherheit und Ergonomie  bedeutende Telefonnummern Richtlinien und Regeln
+[Block] Safety and ergonomics → Sicherheit und Ergonomie
+[Block] Important phone numbers → Maßgebliche Telefonnummern
+[Block] Guidelines and rules → Richtlinien und Regeln
+[Block]  → 
+Rights and obligations → Rechte und Pflichten
+[Block] Students in HSHL have a right to make improvements to the school property. → Studenten in HSHL haben das Recht, Verbesserungen in der Schule zu machen.
+To make improvements → Um Verbesserungen zu machen
+[Answer] <div>Perform unsafe instructions.</div> → <div>Verfolgen Sie unsichere Anweisungen.</div>
+[Answer] <div>Take responsibility for own safety and health.</div> → <div>Verantwortung für eigene Sicherheit und Gesundheit.</div>
+[Answer] <div>Participate in training.</div> → <div>Beteiligung an der Ausbildung.</div>
+[Answer] <div>Use personal protective equipment correctly.</div> → <div>Nutzen Sie persönliche Schutzgeräte richtig.</div>
+[Block] Students in HSHL are NOT obliged to: → Studenten in HSHL sind NOT verpflichtet:
+Obligations → Pflichten
+Rights and obligations. → Rechte und Pflichten.
+Rights and Obligations → Rechte und Pflichten
+[Block] Base Rules → Grundregeln
+[Block] Everyone working in the lab must ensure that all necessary safety and security equipment is available and functioning. This includes: → Jeder, der im Labor arbeitet, muss sicherstellen, dass alle notwendigen Sicherhe
+[Block] Emergency exits
+First-aid information (flyer)
+Fire-hazard information (flyer) → Emergency exits First-aid information (flyer) Fire-hazard information (flyer)
+[Block] Emergency exits → Emergenzentscheidungen
+[Block] First-aid information (flyer) → Erste Hilfe Informationen (Flyer)
+[Block] Fire-hazard information (flyer) → Informationen über Feuergefahr (Flyer)
+[Block] It is important that all employees know how to properly use this equipment. You must not disable or block any safety equipment (for example, by placing objects in front of emergency exits). → Es ist wichtig, dass alle Mitarbeiter wissen, wie diese Ausrüstung ordnungsgemäß
+[Block] Safety and security equipment should only be used for its intended purpose. → Sicherheits- und Sicherheitsgeräte sollten nur für den gewünschten Zweck verwend
+[Block] Let’s take a closer look at the details: → Lass uns die Details genauer ansehen:
+[Block]  → 
+Safety and security equipment → Sicherheits- und Sicherheitsgeräte
+[Block] Lab L3.3-E02-110 - in the context of the lesson - you are here → Lab L3.3-E02-110 - im Kontext der Lektion - Sie sind hier
+Untitled Text → Untitel Text
+Image → Bild
+Lab L3.3-E02-110 → Laboratorie L3.3-E02-110
+Untitled Image → Untitled Bild
+Image → Bild
+Collection Point → Sammelpunkt
+Untitled Image → Untitled Bild
+[Block] After escaping the building you must procced to the collection point on the parking lot until further instructions. → Nach der Flucht vom Gebäude müssen Sie bis zu weiteren Anweisungen zum Sammelpun
+Untitled Text → Untitel Text
+Image → Bild
+Fire Curtains → Feuerstücke
+Fire Curtains → Feuerstücke
+Untitled Image → Untitled Bild
+[Block] To prevent the spread of fire and smoke curtains are deployed on the central stairway, making it inaccessible during a fire. → Um die Verbreitung von Feuer und Rauchwände zu verhindern, werden auf der zentra
+[Block] Consult the Escape Routes and Rescue Equipment map to find the closest escape path → Konsultieren Sie die Fluchtwege und Rettungsgeräte-Karte, um die nächste Fluchtw
+Untitled Text → Untitel Text
+Image → Bild
+Elevators → Elevatoren
+Untitled Image → Untitled Bild
+[Block] Do not use the elevator in case of fire! → Verwendung des Liftes bei Feuer nicht!
+[Block] Consult the Escape Routes and Rescue Equipment map to find the closest escape path. → Konsultieren Sie die Fluchtwege und Rettungsgeräte-Karte, um den nähersten Fluch
+Untitled Text → Untitel Text
+Image → Bild
+Escape Direction → Flucht Richtung
+Untitled Image → Untitled Bild
+[Block] In case of a fire calmly follow the escape routes to exit the building to proceed to the collection point. → Im Falle eines Feueres folgen die Fluchtwege ruhig, um das Gebäude zu verlassen,
+[Block] Do not obstruct or block escape routes! → Verhindern oder blockieren Sie die Fluchtwege!
+[Block] If the escape route is blocked or smoky, stay calm, close the doors, and make yourself visible at the window by waving and shouting. → Wenn die Fluchtstraße blockiert oder Rauch ist, bleiben Sie ruhig, schließen Sie
+Untitled Text → Untitel Text
+Image → Bild
+Fire Prevention → Feuerverhütung
+Untitled Image → Untitled Bild
+[Block] Attempt to extinguish the fire only if this is possible without endangering yourself. In case of strong smoke development, leave the room immediately. → Versuchen Sie, das Feuer nur zu löschen, wenn dies möglich ist, ohne sich selbst
+Untitled Text → Untitel Text
+Image → Bild
+fire extinguisher → Feuervernichtung
+Untitled Image → Untitled Bild
+[Block] Each lab comes equiped with a fire extinguisher not shown on evacuation scheeme → Jede Lab wird mit einem Feuerwehrgerät ausgestattet, der nicht auf der Evakuieru
+Untitled Text → Untitel Text
+Image → Bild
+First Aid Kit → Erste Hilfe Kit
+Untitled Image → Untitled Bild
+Image → Bild
+Untitled Image → Untitled Bild
+Image → Bild
+Manual Fire Alarm → Manual Feueralarm
+Untitled Image → Untitled Bild
+Image → Bild
+Untitled Image → Untitled Bild
+Image → Bild
+Fire Escape Legend → Feuer Flucht Legende
+Untitled Image → Untitled Bild
+Escape Routes and Rescue Equipment → Fluchtwege und Rettungsgeräte
+[Answer] <div>Leave the building using the closest escape route.</div> → <div>Lassen Sie das Gebäude mit der nächstgelegenen Fluchtstraße.</div>
+[Answer] <div>Calmly leave using an elevator.</div> → <div>Stille mit einem Aufzug.</div>
+[Answer] <div>Take the fire extinguisher and start patroling the building looking for a fire to fight.</div> → <div>Fangen Sie den Feuerwehr und beginnen Sie, das Gebäude nach einem Feuer zu kämpfen zu patrolieren.</div>
+[Answer] <div>Ignore it.</div> → <div>Ignore es.</div>
+[Block]  → 
+[Block] What is the first thing to do in case of a fire alarm being sounded? → Was ist das erste, was man tun sollte, wenn ein Feueralarm klingt?
+Fire safety → Feuersicherheit
+[Answer] <div>Proceed to the collection point on the parking lot behind L3.</div> → <div>Gehen Sie zum Sammelpunkt auf dem Parkplatz hinter L3.</div>
+[Answer] <div>Enter the same building.</div> → <div>Im gleichen Gebäude.</div>
+[Answer] <div>Go home.</div> → <div>Gehen Sie nach Hause.</div>
+[Answer] <div>Stand just outside looking for fire and smoke.</div> → <div>Stand gerade draußen auf der Suche nach Feuer und Rauch.</div>
+[Block]  → 
+[Block] What should you do after you safely exited the building? → Was sollten Sie tun, nachdem Sie das Gebäude sicher verlassen haben?
+What should you do after you safely exited the building? → Was sollten Sie tun, nachdem Sie das Gebäude sicher verlassen?
+[Block] When reporting a fire, which information is to be prioritized? → Wenn ein Feuer berichtet wird, welche Informationen priorisiert werden sollen?
+Untitled Text → Untitel Text
+0 → 0 0
+1 → 1
+2 → 2
+3 → 3
+[Block] Who reports? → Wer Berichte?
+Untitled Text → Untitel Text
+0 → 0 0
+1 → 1
+2 → 2
+3 → 3
+[Block] What is burning? → Was brennt?
+Untitled Text → Untitel Text
+0 → 0 0
+1 → 1
+2 → 2
+3 → 3
+[Block] How many people are affected? → Wie viele Menschen sind betroffen?
+Untitled Text → Untitel Text
+0 → 0 0
+1 → 1
+2 → 2
+3 → 3
+[Block] Where is the fire? → Wo ist das Feuer?
+Untitled Text → Untitel Text
+0 → 0 0
+1 → 1
+2 → 2
+3 → 3
+[Block] Name of the professor responsible for the lab → Name des für das Labor zuständigen Professors
+Untitled Text → Untitel Text
+0 → 0 0
+1 → 1
+2 → 2
+3 → 3
+[Block] Who do you think started the fire? → Wer denken Sie, das Feuer begann?
+Untitled Text → Untitel Text
+0 → 0 0
+1 → 1
+2 → 2
+3 → 3
+[Block] What did you have for breakfast? → Was haben Sie für das Frühstück?
+Untitled Text → Untitel Text
+1 → 1
+2 → 2
+3 → 3
+4 → 4
+[Block] who → Wer
+1 → 1
+2 → 2
+3 → 3
+4 → 4
+[Block] what → Was ist
+1 → 1
+2 → 2
+3 → 3
+4 → 4
+[Block] How many → Wie viele
+1 → 1
+2 → 2
+3 → 3
+4 → 4
+[WARN] Truncated block (keeping original) → 2 vs 5
+Untitled Drag and Drop → Untitled Drag und Drop
+Fire safety → Feuersicherheit
+Safety &amp; Security Equipment → Sicherheit &amp; Sicherheitsgeräte
+[Block] Warning signs. → Warnzeichen.
+heading → Titel
+[Block] A warning sign is a type of sign which indicates a potential hazard, obstacle, or condition requiring special attention. → Ein Warnzeichen ist eine Art von Zeichen, das eine mögliche Gefahr, Hindernis od
+Body → Körper
+Image → Bild
+Warning signs → Warnzeichen
+Warning signs → Warnzeichen
+0 → 0 0
+1 → 1
+2 → 2
+3 → 3
+4 → 4
+5 → 5
+6 → 6
+7 → 7
+Image → Bild
+Access prohibited for unotherised personel → Zugang für unentbehrtes Personal verboten
+Access prohibited for unotherised personel → Zugang für unentbehrtes Personal verboten
+[Block] Access prohibited for unotherised personel → Zugang für unentbehrte Mitarbeiter verboten
+Untitled Text → Untitel Text
+1 → 1
+0 → 0 0
+2 → 2
+3 → 3
+4 → 4
+5 → 5
+6 → 6
+7 → 7
+Image → Bild
+Hazards due to leaking batteries → Gefährdungen aufgrund der Batterieversorgung
+Untitled Image → Untitled Bild
+[Block] Hazards due to leaking batteries → Schäden aufgrund der Lücke von Batterien
+Untitled Text → Untitel Text
+2 → 2
+0 → 0 0
+1 → 1
+3 → 3
+4 → 4
+5 → 5
+6 → 6
+7 → 7
+Image → Bild
+Switching is prohibited → Switching ist verboten
+Untitled Image → Untitled Bild
+[Block] Switching is prohibited → Switching ist verboten
+Untitled Text → Untitel Text
+3 → 3
+0 → 0 0
+1 → 1
+2 → 2
+4 → 4
+5 → 5
+6 → 6
+7 → 7
+Image → Bild
+Eating and drinking prohibited → Essen und trinken ist verboten
+Eating and drinking prohibited → Essen und trinken ist verboten
+[Block] Eating and drinking prohibited → Essen und Trinken verboten
+Untitled Text → Untitel Text
+4 → 4
+0 → 0 0
+1 → 1
+2 → 2
+3 → 3
+5 → 5
+6 → 6
+7 → 7
+Image → Bild
+Hot Surfaces → heiße Oberflächen
+Hot Surfaces → heiße Oberflächen
+[Block] Hot Surfaces danger → Wärme Oberflächen Gefahr
+Untitled Text → Untitel Text
+5 → 5
+0 → 0 0
+1 → 1
+2 → 2
+3 → 3
+4 → 4
+6 → 6
+7 → 7
+Image → Bild
+High Voltage → hohe Spannung
+Untitled Image → Untitled Bild
+[Block] High Voltage danger → High Voltage Gefahr
+Untitled Text → Untitel Text
+6 → 6
+0 → 0 0
+1 → 1
+2 → 2
+3 → 3
+4 → 4
+5 → 5
+7 → 7
+Image → Bild
+Hearing protection is required → Hörschutz ist erforderlich
+Untitled Image → Untitled Bild
+[Block] Hearing protection is required → Schutz ist erforderlich
+Untitled Text → Untitel Text
+7 → 7
+0 → 0 0
+1 → 1
+2 → 2
+3 → 3
+4 → 4
+5 → 5
+6 → 6
+Image → Bild
+Hand protection is required → Handschutz erforderlich
+Untitled Image → Untitled Bild
+[Block] Hand protection is required → Handschutz ist erforderlich
+Untitled Text → Untitel Text
+0 → 0 0
+[Block] Access prohibited for unotherised personel → Zugang für unentbehrte Mitarbeiter verboten
+2 → 2
+[Block] Hazards due to leaking batteries → Schäden aufgrund der Lücke von Batterien
+4 → 4
+[Block] Switching is prohibited → Switching ist verboten
+6 → 6
+[Block] Eating and drinking prohibited → Essen und Trinken verboten
+8 → 8
+[Block] Hot Surfaces → Wärme Oberflächen
+10 → 10
+[Block] High Voltage → High Voltage
+12 → 12
+[Block] Hearing protection is required → Schutz ist erforderlich
+14 → 14
+[Block] Hand protection is required → Handschutz ist erforderlich
+Put the safety signs in the drop-zones next to their corresponding meaning → Stellen Sie die Sicherheitszeichen in den Drop-Zonen neben ihrem entsprechenden Sinn
+Warning signs → Warnzeichen
+[Block] First aid → Erste Hilfe
+[Block]  → 
+First aid → Erste Hilfe
+[Block] Principles: → Grundsätze:
+[Block] People in need require help. This is not only a question of morality, but also a legal requirement. We are obliged to help in an emergency, an accident - within the bounds of our possibilities. For most of us it is obvious to help people in need within the scope of our possibilities, even without being legally obliged to do so. → Die Menschen in Not benötigen Hilfe.Dies ist nicht nur eine Frage der Moral, son
+[Block] How to get it right → Wie man es richtig bekommt
+[Block] Stay calm. First get an overview of the situation you have found.
+Observe your own safety, secure the scene of the accident.
+Call for help loudly, thereby drawing attention to the emergency situation.
+Address bystanders directly and ask for their help. It is always important that someone takes the initiative. Reassure those affected and, if necessary, those around you. → Halten Sie sich ruhig. Zuerst erhalten Sie einen Überblick über die Situation, d
+[Block] Stay calm. First get an overview of the situation you have found. → Halten Sie sich ruhig. Zuerst erhalten Sie einen Überblick über die Situation, d
+[Block] Observe your own safety, secure the scene of the accident. → Beobachten Sie Ihre eigene Sicherheit, sichern Sie die Bühne des Unfalls.
+[Block] Call for help loudly, thereby drawing attention to the emergency situation.
+Address bystanders directly and ask for their help. It is always important that someone takes the initiative. Reassure those affected and, if necessary, those around you. → Rufen Sie Hilfe laut, dass Sie auf die Notfallsituation achten. Adressen Sie die
+Untitled Text → Untitel Text
+Image → Bild
+Rautek Maneuver → Rautek Maneuver
+Rautek Maneuver → Rautek Maneuver
+[Block] Sometimes you first have to save the injured person from acute danger by using the Rautek maneuver. → Manchmal müssen Sie zunächst die Verletzte vor akuter Gefahr retten, indem Sie d
+[Block] How to get it right: → Wie man es richtig macht:
+[Block] 1. Speak to the injured person. If they are conscious, inform them of the intended action. → 1. Sprache an die Verletzte.Wenn sie bewusst sind, informieren Sie sie über die 
+[Block] 2. Take hold of the person lying on the floor from behind under the neck and shoulders and make them sit with appropriate momentum. Make sure that you support the head with your forearms and that the patient does not fall to the side. → 2. Halten Sie die Person auf dem Boden von hinten unter den Hals und Schultern u
+[Block] 3. Now step closer behind the patient and with both arms reach underneath their armpits. Place one of the patient's forearms crosswise in front of their body and grab this arm with both hands from above. Do not grab the forearm, but rake over it with all fingers (also thumbs). → 3. Jetzt steigen Sie näher hinter dem Patienten und mit beiden Armen erreichen S
+[Block] 4. Bend your knees and keep your back straight to relieve the spine, pull the person concerned close to your own body onto your thighs. Then pull them to a safe place and carefully lay them down preferably on a blanket. → 4. Binden Sie Ihre Knie und halten Sie Ihren Rücken recht, um den Rücken zu erle
+[Block] 5. Then talk to the patient again and administer the necessary first aid. → 5. Sie sprechen dann wieder mit dem Patienten  und geben die notwendige Erste Hi
+Untitled Text → Untitel Text
+[Block] The obligation to help → Die Pflicht zur Hilfe
+[Block] People in need require help. This is not only a question of morality, but also a legal requirement. We are obliged to help in an emergency, an accident - within the bounds of our possibilities. For most of us it is obvious to help people in need within the scope of our possibilities, even without being legally obliged to do so. → Die Menschen in Not benötigen Hilfe.Dies ist nicht nur eine Frage der Moral, son
+[Block] According to § 323c StGB (German Criminal Code) we are legally obliged to help → In Übereinstimmung mit § 323c StGB (Deutscher Strafgesetzbuch) sind wir gesetzli
+[Block] "Whoever does not render assistance in the case of an accident or a common danger or emergency although it is necessary and can reasonably be expected under the circumstances, in particular if it is possible without substantial danger to that person and without breaching other important duties, incurs a penalty of imprisonment for a term not exceeding one year or a fine." → "Wer nicht bei einem Unfall oder einem allgemeinen Gefahr oder Notfall hilft, ob
+Untitled Text → Untitel Text
+[Block] The accident report → Der Unfallbericht
+[Block] Alerting the rescue service as fast as possible is almost always an important part of first aid. → Warnung des Rettungsdienstes so schnell wie möglich ist fast immer ein wichtiger
+[Block] The uniform nationwide emergency numbers are 112 → Die einheitlichen nationalen Notnummern sind 112
+[Block] The accident report should contain the following information: → Der Unfallbericht sollte folgende Informationen enthalten:
+[Block] Where is the emergency? -   Specify the exact location of the emergency: town, street, house number, floor etc. In case of our university - Hoch-Schule Hamm-Lippstadt Campus Lippstadt(/Hamm).
+What has happened? - The rescue directing centre has to be able to identify what measures need to be taken.
+How many injured/victims need to be taken care of?
+Which type of injuries or symptoms do the viticms have? - Is anybody in a life-threatening condition?
+Wait for any questions/instructions the dispatcher might have! - Only hang up when they have ended the call on their end. → Wo ist die Notfälle? -   Angeben Sie die genaue Lage der Notfälle: Stadt, Straße
+[Block] Where is the emergency? -   Specify the exact location of the emergency: town, street, house number, floor etc. In case of our university - Hoch-Schule Hamm-Lippstadt Campus Lippstadt(/Hamm). → Wo ist die Not? -   Angeben Sie die genaue Lage der Not: Stadt, Straße, Hausnumm
+[Block] What has happened? - The rescue directing centre has to be able to identify what measures need to be taken. → Was geschah? - Das Rettungszentrum muss in der Lage sein, zu identifizieren, wel
+[Block] How many injured/victims need to be taken care of? → Wie viele Verletzte/Verletzte müssen behandelt werden?
+[Block] Which type of injuries or symptoms do the viticms have? - Is anybody in a life-threatening condition? → Welche Art von Verletzungen oder Symptomen haben die Vitikme? - Ist jemand in ei
+[Block] Wait for any questions/instructions the dispatcher might have! - Only hang up when they have ended the call on their end. → Wartet für alle Fragen/Anweisungen, die der Absender haben könnte! - Hängt nur a
+[Block] The dispatcher will usually lead the conversation with a fixed set of questions. → Der Absender führt in der Regel das Gespräch mit einem festen Satz von Fragen.
+[Block] The HSHL First responders Numbers can be found in every laboratory: → Die HSHL Erste Antworten Zahlen können in jedem Labor gefunden werden:
+Untitled Text → Untitel Text
+Image → Bild
+Untitled Image → Untitled Bild
+Image → Bild
+Emergency numbers → Notfallzahlen
+Untitled Image → Untitled Bild
+[Block] The first contact → Der erste Kontakt
+[Block] Usually no technical aids are required to learn about the condition of an injured person. Most of the victims are conscious and therefore responsive. They can provide details about their injuries, pain or their condition. However, it must be taken into account that injured, but also acutely ill people, are usually emotionally very tense. It is therefore important to build up trust between the first-aider and the person affected. → Im Allgemeinen sind keine technische Hilfe erforderlich, um über den Zustand ein
+[Block] Dealing with victim: → Verhandlung mit Opfer:
+[Block] Get yourself on eye-level with the victim - Kneel or squat down when the person is lying on the floor. 
+Look at the person - You can see if they are agitated, cold, in pain or have visible injuries.
+Tell them your name - Ask them for their name.
+Ask other people for help.
+Carefully establish physical contact - Hold the patient's hand or place your hand on their shoulder.
+Always tell the person what you are doing. → Fangen Sie auf Augenniveau mit dem Opfer - Kneel oder schütteln Sie, wenn die Pe
+[Block] Get yourself on eye-level with the victim - Kneel or squat down when the person is lying on the floor. → Fangen Sie sich mit dem Opfer auf Augenniveau - Knieel oder schneiden Sie, wenn 
+[Block] Look at the person - You can see if they are agitated, cold, in pain or have visible injuries. → Schauen Sie sich an die Person -  Sie können sehen, ob sie agitatiert, kalt, sch
+[Block] Tell them your name - Ask them for their name. → Sagen Sie ihnen Ihren Namen - Sagen Sie ihnen Ihren Namen.
+[Block] Ask other people for help. → Sie bitten andere Menschen um Hilfe.
+[Block] Carefully establish physical contact - Hold the patient's hand or place your hand on their shoulder. → Sorgfältig einen körperlichen Kontakt festlegen - Haltet die Hand des Patienten 
+[Block] Always tell the person what you are doing. → Sagen Sie immer der Person, was Sie tun.
+[Block]  → 
+Untitled Text → Untitel Text
+[Block] Recognising unconsciousness - The person is unresponsive, they no longer react to physical contact, such as shaking their shoulders.
+Dangers of unconsciousness - protective reflexes are not functional and muscles are relaxed. Due to lost muscle tone the tounge can block the airway.
+Check breathing: Clear their airway. With your cheek and ear you can feel and hear the breaths. A rising and falling chest indicates moving air, thus breathing. → Erkenne Unbewusstsein - Die Person ist unresponsiv, sie reagieren nicht mehr auf
+Untitled Text → Untitel Text
+Image → Bild
+Untitled Image → Untitled Bild
+[Block] 1. Position the arm closest to you in a right angle to the body, the palm is facing upwards. → 1. Positionieren Sie den Arm am nächsten zu Ihnen in einem rechten Winkel zum Kö
+[Block] 2. Take the arm farther from you across the person's chest and place the back of their hand on the closer cheek. → 2. Nehmen Sie die Arme weiter von Ihnen über die Brust der Person und legen Sie 
+[Block] 3. Bend the leg farther from you by pulling the thigh (not the joint). → 3. Verteilen Sie die Beine weiter von Ihnen, indem Sie die Schale (nicht die Gel
+[Block] 4. Pull the unconscious person towards you so that the thigh is positioned at a right angle to the hip and that the hand on the cheek maintains its position. → 4. Pull die unbewusste Person zu dir, so dass der Schwanz an einem rechten Winke
+[Block] 5 .Clear the airway and stabilise the position with the hand on the cheek. → 5 .Schließen Sie die Luftstraße und stabilisieren Sie die Position mit der Hand 
+[Block] 6. Cover the person and regularly check their breathing. → 6. Cover die Person und prüfe regelmäßig ihre Atmung.
+Untitled Text → Untitel Text
+Image → Bild
+Untitled Image → Untitled Bild
+[Block] The Deifbrillators in HSHL are located in L4.1-E00 and  L1-E01. Have someone fetch for it immidiately in case of Respiratory and circulatory disorders. → Die Deifbrillatoren in HSHL befinden sich in L4.1-E00 und L1-E01. Haben Sie bei 
+[Block] Stick the electrodes on the device to the naked chest of the person affected and switch the device on.
+It will diagnose the heart activity. Only if there is ventricular fibrillation you can trigger a shock - with voice-guided instruction.
+This simple operation means that the device can be used even by tained layperson first responders. → Stick die Elektroden auf dem Gerät auf den nackten Brust der betroffenen Person 
+[Block]  → 
+Untitled Text → Untitel Text
+Image → Bild
+Untitled Image → Untitled Bild
+Image → Bild
+Untitled Image → Untitled Bild
+[Block] After using the First aid kit, fill out a form in accident book so that a person affected can recieve a compensation from the School insurance: → Nach der Verwendung des First Aid Kit, füllen Sie ein Formular im Unfallbuch aus
+Untitled Text → Untitel Text
+Image → Bild
+Untitled Image → Untitled Bild
+First Aid → Erste Hilfe
+First Aid → Erste Hilfe
+[Block] First Responders → Erste Antworten
+Heading → Titel
+[Block] In case of an emergency, you can reach out to HSHL’s First Responders. They are trained to help guide you through dangerous situations. → Im Falle eines Notfalls können Sie die ersten Antworten von HSHL erreichen. sie 
+[Block] You can find the updated list with contact information for the current First Responders in every lab, next to the internal network telephone. → Sie können die aktualisierte Liste mit Kontaktinformationen für die aktuellen Fi
+[Block]  → 
+First responders → Erste Antworten
+First responders → Erste Antworten
+First Responders → Erste Antworten
+[Block] Clean Desk | Clean Lab Principle → Clean Desk♰ Clean Lab Prinzip
+Heading → Titel
+Image → Bild
+BEFORE YOU LEAVE  Flowchart → Bevor Sie Flowchart
+BEFORE YOU LEAVE  Flowchart → Bevor Sie Flowchart
+[Block] Everyone must keep the lab clean, tidy, and organized. Please follow these rules: → Jeder muss das Labor sauber, sauber und organisiert halten. folgen Sie bitte die
+[Block] No animals are allowed in the lab.
+Eating, drinking, and smoking are not permitted.
+Return workstations to the way you found them (turn off devices, close windows, etc.).
+Leave the lab in perfect condition—clean up any mess or waste you create.
+Before using any equipment, inspect it for damage.
+Ensure you have enough light, space, and a quiet environment before starting your work. → Keine Tiere sind im Labor erlaubt. Ein Essen, Trinken und Rauchen sind nicht erl
+[Block] No animals are allowed in the lab. → Es sind keine Tiere im Labor erlaubt.
+[Block] Eating, drinking, and smoking are not permitted. → Ein Essen, Trinken und Rauchen sind nicht erlaubt.
+[Block] Return workstations to the way you found them (turn off devices, close windows, etc.). → Return Workstations to the way you found them (Return off devices, close windows
+[Block] Leave the lab in perfect condition—clean up any mess or waste you create. → Lassen Sie das Labor in perfektem Zustand – reinigen Sie jede Müll oder Müll, di
+[Block] Before using any equipment, inspect it for damage. → Vor der Verwendung eines Geräts überprüfen Sie es für Schäden.
+[Block] Ensure you have enough light, space, and a quiet environment before starting your work. → Sorgt dafür, dass du genug Licht, Raum und eine ruhige Umgebung hast, bevor du d
+Clean Desk | Clean Lab Principle → Clean Desk - Prinzip des Clean Lab
+Image → Bild
+Poor space maintanence → Schlechte Raumhaltung
+Bad space maintanence → Schlechte Raumhaltung
+Image → Bild
+Passable work space → Passive Arbeitsplätze
+Passable work space → Passive Arbeitsplätze
+Image → Bild
+Organisers → Organisatoren
+Organisers → Organisatoren
+Image → Bild
+Organiser → Organisator
+Organiser → Organisator
+Image → Bild
+Drawer → Drachen
+Drawer → Drachen
+Always make sure to leave the work space the same as before or better. → Stellen Sie immer sicher, dass Sie den Arbeitsplatz wie zuvor oder besser verlassen.
+Workspace managment → Arbeitsplatzmanagement
+Clean Desk | Clean Lab Principle → Clean Desk - Prinzip des Clean Lab
+Image → Bild
+Study-assist → Studienhilfe
+[Block] HSHL offers the following cloud systems for storing your files: → HSHL bietet die folgenden Cloud-Systeme zur Speicherung Ihrer Dateien an:
+[Block] NextCloud (2 GB) – Learn more here
+Sciebo (5 Petabytes shared among all users) – Learn more here → NextCloud (2 GB) – Learn more here Sciebo (5 Petabytes geteilt unter allen Benut
+[Block] NextCloud (2 GB) – Learn more here → NextCloud (2 GB) – Erfahren Sie hier mehr
+[Block] Sciebo (5 Petabytes shared among all users) – Learn more here → Sciebo (5 Petabytes unter allen Benutzern geteilt) – Lernen Sie hier mehr
+[Block] Please remember: → Bitte beachten Sie:
+[Block] Respect copyrights and patents when using these services.
+Content that violates German law cannot be uploaded, viewed, or saved in any form. → Respekt für Urheberrechte und Patente bei der Nutzung dieser Dienste.  Inhalte, 
+[Block] Respect copyrights and patents when using these services. → Respekt für Urheberrechte und Patente bei der Nutzung dieser Dienste.
+[Block] Content that violates German law cannot be uploaded, viewed, or saved in any form. → Inhalte, die den deutschen Recht verstoßen, können nicht in irgendeiner Form hoc
+Back-up services → Backup-Dienste
+Data Backups → Daten Backups
+[Block] 6S Lean Approach → 6S Lean Ansatz
+Title → Titel
+Image → Bild
+The 6 Components and Their Importance → Die 6 Komponenten und ihre Bedeutung
+[Block] The following six steps help ensure productive and safe work in the lab: → Die folgenden sechs Schritte helfen, produktive und sichere Arbeit im Labor zu g
+[WARN] Truncated block (keeping original) → 287 vs 676
+[Block] Seiri (Sort)
+	Identify what is necessary and unnecessary.
+	Remove unnecessary items from the workspace. → Seiri (Sort) Identifizieren Sie, was notwendig und unnötig ist. Entfernen Sie un
+[Block] Seiri (Sort)
+	Identify what is necessary and unnecessary.
+	Remove unnecessary items from the workspace. → Seiri (Sort) Identifizieren Sie, was notwendig und unnötig ist. Entfernen Sie un
+[Block] Seiton (Straighten, set in order)
+	Organize and arrange the necessary items.
+	Create clear, easy-to-follow storage locations. → Seiton (Straighten, set in order) Organisieren und ordnen Sie die notwendigen El
+[Block] Seiton (Straighten, set in order)
+	Organize and arrange the necessary items.
+	Create clear, easy-to-follow storage locations. → Seiton (Straighten, set in order) Organisieren und ordnen Sie die notwendigen El
+[Block] Seiso (Shine)
+	Clean and maintain the workspace regularly.
+	Prevent contamination and ensure safety. → Seiso (Shine) Rein und hält den Arbeitsplatz regelmäßig. Verhindert Verunreinigu
+[Block] Seiso (Shine)
+	Clean and maintain the workspace regularly.
+	Prevent contamination and ensure safety. → Seiso (Shine) Rein und hält den Arbeitsplatz regelmäßig. Verhindert Verunreinigu
+[Block] Seiketsu (Standardize)
+	Follow consistent procedures and work instructions.
+	Keep the lab clean and organized at all times. → Seiketsu (Standardisiert) Folgen Sie konsequenten Verfahren und Arbeitsanweisung
+[Block] Seiketsu (Standardize)
+	Follow consistent procedures and work instructions.
+	Keep the lab clean and organized at all times. → Seiketsu (Standardisiert) Folgen Sie konsequenten Verfahren und Arbeitsanweisung
+[Block] Shitsuke (Sustain)
+	Continuously review and improve processes.
+	Encourage a culture of discipline and improvement. → Shitsuke (Sustain) Kontinuierliche Überprüfung und Verbesserung von Prozessen. F
+[Block] Shitsuke (Sustain)
+	Continuously review and improve processes.
+	Encourage a culture of discipline and improvement. → Shitsuke (Sustain) Kontinuierliche Überprüfung und Verbesserung von Prozessen. E
+[Block] Safety
+	Always prioritize safety in all lab activities.
+	Identify and address potential hazards. → Sicherheit Priorität für Sicherheit in allen Labouraktivitäten. Identifizieren u
+[Block] Safety
+	Always prioritize safety in all lab activities.
+	Identify and address potential hazards. → Sicherheit Priorität für die Sicherheit in allen Labouraktivitäten. Identifizier
+[Block]  → 
+6S Approach → 6S Ansatz
+6S Lean Approach → 6S Lean Ansatz
+[Block] Repairs and Changes → Reparaturen und Änderungen
+Title → Titel
+Image → Bild
+Out of use → Aus der Verwendung
+Out of use → Aus der Verwendung
+[Block] Any damage to the lab, equipment, or machines must be reported, and repairs will be arranged by the responsible professor.
+Changing hardware or software configurations is not allowed.
+Only the IT department is permitted to download and install software. → Jede Beschädigung des Labors, der Ausrüstung oder der Maschinen muss gemeldet we
+[Block] Any damage to the lab, equipment, or machines must be reported, and repairs will be arranged by the responsible professor. → Jede Beschädigung des Labors, der Ausrüstung oder der Maschinen muss gemeldet we
+[Block] Changing hardware or software configurations is not allowed. → Die Änderung der Hardware- oder Softwarekonfigurationen ist nicht erlaubt.
+[Block] Only the IT department is permitted to download and install software. → nur der IT-Abteilung ist es erlaubt, Software herunterzuladen und installieren.
+Repairs and changes → Reparaturen und Änderungen
+[Answer] <div>Report to the resposible <em>s</em>pecialist or supervisor.</div> → <div>Bericht an den zuständigen <em>s</em>Specialist oder Supervisor.</div>
+[Answer] <div>Remove it from the workspace.</div> → <div>Entfernen Sie es aus dem Arbeitsplatz.</div>
+[Answer] <div>Ignore it.</div> → <div>Ignore es.</div>
+[Answer] <div>Hide it and don`t tell anyone.</div> → <div>Verbergen Sie es und erzählen Sie es niemanden.</div>
+[Block] What are the first actions in case of a damage or a malfunction of the equipment? → Was sind die ersten Maßnahmen im Falle eines Schadens oder einer Fehlfunktion de
+What are the first actions in case of a damage or a malfunction of the equipment? → Was sind die ersten Maßnahmen im Falle eines Schadens oder einer Fehlfunktion der Ausrüstung?
+[Answer] <div>Contact the IT deparment.</div> → <div>Kontaktieren Sie die IT-Abteilung.</div>
+[Answer] <div>Change the hard drive on the workstation.</div> → <div>Die Festplatte auf der Arbeitsstation ändern.</div>
+[Answer] <div>Just do it.</div> → <div>Sie machen es einfach.</div>
+[Answer] <div>There is no way to install new software.</div> → <div>Es gibt keine Möglichkeit, neue Software zu installieren.</div>
+[Block] How can you install new software to the Laboratory workstations? → Wie können Sie neue Software in die Laborstationen installieren?
+Change software → Software ändern
+Repairs and changes → Reparaturen und Änderungen
+Repairs and Changes → Reparaturen und Änderungen
+[Block] Electrical equipment → Elektrische Ausrüstung
+Electrical equipment → Elektrische Ausrüstung
+Image → Bild
+warning signs → Warnzeichen
+[Block] Common Rules for Electrical Tools → Gemeinsame Vorschriften für elektrische Werkzeuge
+[Block] There are a few basic safety rules that apply to all electrical tools. These rules don’t cover every specific danger, but they are important to remember: → Es gibt einige grundlegende Sicherheitsregeln, die für alle elektrischen Werkzeu
+[Block] Before starting work with electrical equipment: → Vor Beginn der Arbeit mit Elektrogeräten:
+[Block] Make sure the equipment is not visibly damaged.
+Check that the cables are also not damaged.
+Ensure your hands and workspace are dry.
+Make sure you have received the lab’s safety instructions and have read the manufacturer’s manual for the equipment.
+Use the correct power sources for the equipment. → Sorgt dafür, dass die Ausrüstung nicht sichtbar beschädigt ist. Sorgt dafür, das
+[Block] Make sure the equipment is not visibly damaged. → Sie stellen sicher, dass die Ausrüstung nicht sichtbar beschädigt ist.
+[Block] Check that the cables are also not damaged. → Check, dass auch die Kabel nicht beschädigt sind.
+[Block] Ensure your hands and workspace are dry. → Sorgt dafür, dass deine Hände und Arbeitsplätze trocken sind.
+[Block] Make sure you have received the lab’s safety instructions and have read the manufacturer’s manual for the equipment. → Vergewissern Sie sich, dass Sie die Sicherheitsanweisungen des Labors erhalten h
+[Block] Use the correct power sources for the equipment. → Nutzen Sie die richtigen Stromquellen für die Ausrüstung.
+[Block] While working: → Während arbeitet:
+[Block] Follow both the lab’s and the manufacturer’s safety instructions.
+Only use the equipment for its intended purpose. → Folgen Sie den Sicherheitsanweisungen sowohl des Labors als auch des Herstellers
+[Block] Follow both the lab’s and the manufacturer’s safety instructions. → Siehe die Sicherheitsanweisungen sowohl des Labors als auch des Herstellers.
+[Block] Only use the equipment for its intended purpose. → Nutzen Sie die Ausrüstung nur für den gewünschten Zweck.
+[Block] In case of malfunctions (e.g., unusual noises, smoke, electric shocks, etc.): → In Fällen von Fehlfunktionen (z. B. ungewöhnliche Geräusche, Rauch, Stromschocks
+[Block] Immediately turn off the equipment and inform the responsible specialist or supervisor.
+Do not attempt any unauthorized repairs or maintenance. → Immediell deaktivieren Sie die Ausrüstung und informieren Sie den zuständigen Sp
+[Block] Immediately turn off the equipment and inform the responsible specialist or supervisor. → Immediell deaktivieren Sie die Ausrüstung und informieren Sie den zuständigen Sp
+[Block] Do not attempt any unauthorized repairs or maintenance. → Sie versuchen keine unbefugten Reparaturen oder Wartung.
+[Block] Important:
+Users are responsible for checking the safety of equipment and machines before use. → Important: Die Benutzer sind verantwortlich, die Sicherheit der Ausrüstung und M
+[Block] Please note, HSHL Lippstadt and its entities do not guarantee that the systems meet all user requirements or that they will run without errors or interruptions. → Bitte beachten Sie, dass HSHL Lippstadt und seine Einrichtungen nicht garantiere
+The common rules → Die gemeinsamen Regeln
+[Answer] <div>To check the equipment and cables for visible damage.</div> → <div>Um die Ausrüstung und Kabel für sichtbare Schäden zu überprüfen.</div>
+[Answer] <div>To recieve the relevant safety instructions.</div> → <div>Um die relevanten Sicherheitsanweisungen zu erhalten.</div>
+[Answer] <div>To familiarise oneself with the manufacturers manuals.</div> → <div>Um sich mit den Herstellergebnissen vertraut zu machen.</div>
+[Answer] <div>To insulate oneself with plastic tape.</div> → <div>Um sich mit einem Kunststoffband zu isolieren.</div>
+[Answer] <div>Make sure someone is observing you powering the tool on.</div> → <div>Vergewissern Sie sich, dass jemand Sie beobachtet.</div>
+[Answer] <div>Make sure no one is observing you powering the tool on.</div> → <div>Vergewissern Sie sich, dass niemand Sie beobachtet.</div>
+[Block] What is required of students before they start work on electrical equipment? → Was ist von den Studierenden erforderlich, bevor sie an Elektrogeräten arbeiten?
+The common rules → Die gemeinsamen Regeln
+[Answer] <div>Switch it off.</div> → <div>Schalten Sie es ab.</div>
+[Answer] <div>Contact the responsible specialist or supervisor.</div> → <div>Kontaktieren Sie den zuständigen Spezialisten oder Supervisor.</div>
+[Answer] <div>Ask a coworker to look at the malfunctioning tool and decide what to do next.</div> → <div>Lassen Sie einen Co-Worker auf das Funktionsstörungs-Tool und entscheiden Sie, was Sie dann tun müssen.</div>
+[Answer] <div>Switch off the equipment and then immediately turn it back on to reset it.</div> → <div>Schalten Sie das Gerät aus und drehen Sie es dann sofort wieder an, um es wieder aufzustellen.</div>
+[Block] What is the first thing to do if you notice any signs of malfunctions? → Was ist das erste, was Sie tun sollten, wenn Sie Anzeichen von Fehlfunktionen be
+First thing to do → Die erste Sache zu tun
+The common rules → Die gemeinsamen Regeln
+Electrical equipment safety → Sicherheit elektrischer Ausrüstung
+[Block] Electrical equipment → Elektrische Ausrüstung
+Electrical equipment → Elektrische Ausrüstung
+Image → Bild
+Electrical equipment → Elektrische Ausrüstung
+Electrical equipment → Elektrische Ausrüstung
+[Block] To turn on the power sockets in the Lab: → Um auf die Stromschrauben im Lab zu wenden:
+To turn on → um zu drehen
+Image → Bild
+to turn on → um zu drehen
+to turn on → um zu drehen
+Image → Bild
+the leftmost switch → Der linken Schalter
+the leftmost switch → Der linken Schalter
+Image → Bild
+the black rectangular button → Der schwarze rektanguläre Button
+the black rectangular button → Der schwarze rektanguläre Button
+Image → Bild
+the switch next to socket → Der Schalter neben dem Socket
+the switch next to socket → Der Schalter neben dem Socket
+Image → Bild
+to turn off → um abzuschalten
+to turn off → um abzuschalten
+Image → Bild
+the big red button → Der große rote Button
+the big red button → Der große rote Button
+to turn on → um zu drehen
+[Block] To turn off return the power-breakers to their initial position. → Um die Strombrecher zurück zu ihrer ursprünglichen Position zu deaktivieren.
+[Block]  → 
+To turn off → um abzuschalten
+Image → Bild
+Electrical equipment → Elektrische Ausrüstung
+Electrical equipment → Elektrische Ausrüstung
+[Block] Make the equipment you are working on unavaliable to switch on, especially if you are away from it. → Machen Sie die Ausrüstung, auf der Sie arbeiten, unbewertbar zu wechseln, besond
+[Block]  → 
+Make the equipment you are working on unavaliable → Machen Sie die Ausrüstung, auf der Sie arbeiten, unbewertbar
+Image → Bild
+Electrical equipment → Elektrische Ausrüstung
+Electrical equipment → Elektrische Ausrüstung
+[Block] Make sure that the equipment you are working on has no power with the multimeter. → Aufgewissern Sie sich, dass das Gerät, auf dem Sie arbeiten, mit dem Multimeter 
+Multimeter → Multimeter
+Image → Bild
+Ground 1st short circuit → Ground 1st kurze Kreise
+Ground 1st short circuit → Ground 1st kurze Kreise
+[Block] After you checked the equipment ground the 1st circuit.
+That way the moment it may be accidentaly turned on, the circuit breaker would immediately switch off. → Nach der Überprüfung der Ausrüstung unter dem 1. Kreis. So dass der Moment, an d
+Ground 1st short circuit → Ground 1st kurze Kreise
+Image → Bild
+Insulate adjacent live parts → Insulate nahe lebende Teile
+Insulate adjacent live parts → Insulate nahe lebende Teile
+[Block] In case there are live parts impossible to switch off you should insuilate them from the workspace. → Wenn es lebendige Teile gibt, die nicht ausgeschaltet werden können, sollten Sie
+Insulate adjacent live parts → Insulate nahe lebende Teile
+Working with Electrical Equipment → Arbeiten mit Elektrogeräten
+Image → Bild
+IT-INFRASTRUKTUR → IT-Infrastruktur
+[Block] What to do in case of IT emergencies? → Was tun Sie bei IT-Emergenzen?
+[Block] Stay calm and don’t panic.
+
+
+Report the IT emergency right away.
+Don’t hesitate to call—it's always better to be safe than sorry! → Halten Sie ruhig und panikieren Sie nicht.   Rapportieren Sie die IT-Emergenz so
+[Block] Stay calm and don’t panic. → Halten Sie ruhig und panikieren Sie nicht.
+[Block] Stay calm and don’t panic. → Halten Sie ruhig und panikieren Sie nicht.
+[Block] Report the IT emergency right away.
+Don’t hesitate to call—it's always better to be safe than sorry! → Report the IT emergency sofort. Schweigen Sie nicht, zu rufen – es ist immer bes
+[Block] Report the IT emergency right away. → Bericht der IT-Emergenz sofort.
+[Block] Don’t hesitate to call—it's always better to be safe than sorry! → Schweigen Sie nicht, zu rufen - es ist immer besser, sicher zu sein als zu entsc
+[Block] IT Emergency Response Number:
+📞 02381 / 8789-250 → IT Notfallreaktion Nummer: ♰ 02381 / 8789-250
+[Block] or via:
+it-support@hshl.de → oder über: it-support@hshl.de
+[Block]  → 
+What to do in case of IT emergencies → Was tun bei Notfällen
+[Block] 👤 Who reports the emergency?
+💻 What IT system is affected?
+🔍 How did you work with the IT system? What did you observe?
+⏰ When did the indident occur
+📍 Where is the affected IT system located (building, room, workstation) → Wer berichtet über den Notfall?  Welches IT-System wird betroffen?  Wie arbeitet
+[Block] 👤 Who reports the emergency? → Wer berichtet über den Notfall?
+[Block] 💻 What IT system is affected? → Welches IT-System wird betroffen?
+[Block] 🔍 How did you work with the IT system? What did you observe? → Wie arbeitest du mit dem IT-System?Was hast du beobachtet?
+[Block] ⏰ When did the indident occur → Wenn der Indident passiert hat
+[WARN] Truncated block (keeping original) → 1 vs 71
+[Block]  → 
+Untitled Text → Untitel Text
+[Block] Rules of Conduct in case of an IT emergency: → Verhaltensregeln in Fällen eines IT-Untersuchens:
+[Block] 1. Stop using the IT system → 1. Stoppen Sie mit dem IT-System
+[Block] 2. Record your observations → 2. Aufzeichnen Sie Ihre Beobachtungen
+[Block] 3. Take measures only upon instructions → 3. Verwenden Sie Maßnahmen nur nach Anweisungen
+[Block] 4. Turn off WiFi → 4. Widerrufen von WiFi
+[Block] 5. Pull out thenetwork plug → 5. Ausfüllen Sie das Afterwork Plug
+[Block] 6. Don't turn off the computer! → 6. Schalten Sie den Computer nicht aus!
+[Block]  → 
+[Block]  → 
+Rules of Conduct → Regeln des Verhaltens
+[Answer] <div>Report to the IT department.</div> → <div>Bericht an die IT-Abteilung.</div>
+[Answer] <div>Turn the IT system off.</div> → <div>Schalten Sie das IT-System aus.</div>
+[Answer] <div>Start taking measurements.</div> → <div>Start mit Messungen.</div>
+[Answer] <div>Try to back up your data.</div> → <div>Versuchen Sie, Ihre Daten zu speichern.</div>
+[Block] What is the first thing to do in case of an IT emergency? → Was ist das erste, was man im Falle eines IT-Untersuchens tun soll?
+First thing to do in case of an IT emergency → Das erste, was man in Notfall zu tun hat
+IT emergency → Das Notfall
+What to do in case of IT emergencies? → Was tun im Falle von Notfällen?
+[Block] Postscript → Postscript
+[Block] Remember, at HSHL, students are required to: → Lassen Sie sich daran erinnern, dass bei HSHL die Schüler dazu verpflichtet sind
+[Block] Take responsibility for their own safety and health.
+Consider the safety and health of others affected by their actions. → Verantwortlich für ihre eigene Sicherheit und Gesundheit. Die Sicherheit und Ges
+[Block] Take responsibility for their own safety and health. → Verantwortlich für ihre eigene Sicherheit und Gesundheit.
+[Block] Consider the safety and health of others affected by their actions. → Rücksichtigung der Sicherheit und Gesundheit anderer, die durch ihre Handlungen 
+[Block] We highly recommend taking the time to familiarize yourself with any electrical or potentially dangerous equipment. You can do this by reading the manual or asking for help from someone with more experience. This will help you avoid unnecessary problems or injury. → Wir empfehlen Ihnen, die Zeit zu nehmen, um sich mit elektrischen oder potenziel
+[Block] Thank you for taking the time to go through the safety section and for helping to keep our labs safe and welcoming! → Danke für die Zeit, um durch den Sicherheitsabschnitt zu gehen und für die Hilfe
+[Block] Password for the survey: dSafe → Passwort für die Umfrage: dSafe
+Postscript → Postschrift
+Postscript → Postschrift
+[Block] Resources → Ressourcen
+[Block] First Aid Manual: Download here (as of 02.09.2024)
+
+
+Safety Instructions for First Semester Students:
+	Basic Freshman Training – Unofficial translation of the original German document. → First Aid Manual: Download here (ab 02.09.2024)   Sicherheitsanweisungen für Stu
+[Block] First Aid Manual: Download here (as of 02.09.2024) → First Aid Manual: Download here (as of 02.09.2024)
+[Block] First Aid Manual: Download here (as of 02.09.2024) → First Aid Manual: Download here (as of 02.09.2024)
+[Block] Safety Instructions for First Semester Students:
+	Basic Freshman Training – Unofficial translation of the original German document. → Sicherheitsanweisungen für Studenten des ersten Semesters: Basic Freshman Traini
+[Block] Safety Instructions for First Semester Students:
+	Basic Freshman Training – Unofficial translation of the original German document. → Sicherheitsanweisungen für Studenten des ersten Semesters: Basic Freshman Traini
+Resourses → Ressourcen
+Resourses → Ressourcen
+[✅] Translated and saved: C:/Users/uleru/Documents/For Moodle course/translations folder/the translations/PythonApplication1/main/freshman-laboratory-safety_translated.h5p
