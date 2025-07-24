@@ -17,7 +17,6 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 tokenizer = M2M100Tokenizer.from_pretrained(MODEL_NAME)
 model = M2M100ForConditionalGeneration.from_pretrained(MODEL_NAME).to(device)
 tokenizer.src_lang = SOURCE_LANG
-
 def sanitize_html(html):
     from bs4 import BeautifulSoup
     soup = BeautifulSoup(html, "html.parser")
@@ -35,8 +34,9 @@ def translate_html_preserve_tags(html, translator_func, log_callback, max_tokens
     from bs4 import BeautifulSoup
 
     def estimate_tokens(text):
+        # Roughly 4 chars per token
         return max(1, len(text) // 4)
-
+    
     html = sanitize_html(html)
     if estimate_tokens(html) <= max_tokens:
         try:
@@ -48,10 +48,18 @@ def translate_html_preserve_tags(html, translator_func, log_callback, max_tokens
             return html
 
     soup = BeautifulSoup(html, "html.parser")
+    translated_html = ""
 
-    # Handle lists
-    for tag in soup.find_all(['ol', 'ul']):
-        for li in tag.find_all('li', recursive=False):
+    # Try to find a single parent tag that contains all content
+    parent = None
+    for tag in soup.contents:
+        if hasattr(tag, "name"):
+            parent = tag
+            break
+    
+    if parent and parent.name in ["ol", "ul"]:
+        # Translate each <li> as an HTML string, then reassemble
+        for li in parent.find_all("li", recursive=False):
             li_html = str(li)
             if estimate_tokens(li_html) > max_tokens:
                 translated_li = translate_html_preserve_tags(li_html, translator_func, log_callback, max_tokens)
@@ -63,22 +71,28 @@ def translate_html_preserve_tags(html, translator_func, log_callback, max_tokens
                     translated_li = li_html
             li.clear()
             li.append(BeautifulSoup(translated_li, "html.parser"))
+        translated_html = str(soup)
+    else:
+        # Otherwise, translate each top-level <p> or fallback to lines
+        blocks = soup.find_all("p", recursive=False)
+        if not blocks:
+            # fallback: lines
+            blocks = [BeautifulSoup(f"<p>{line}</p>", "html.parser") for line in html.split('\n') if line.strip()]
+        for block in blocks:
+            block_html = str(block)
+            if estimate_tokens(block_html) > max_tokens:
+                translated_block = translate_html_preserve_tags(block_html, translator_func, log_callback, max_tokens)
+            else:
+                try:
+                    translated_block = translator_func(block_html)
+                except Exception as e:
+                    log_callback(f"[P ERROR] {e}")
+                    translated_block = block_html
+            block.clear()
+            block.append(BeautifulSoup(translated_block, "html.parser"))
+        translated_html = str(soup)
 
-    # Top-level <p> chunks
-    for p in soup.find_all('p', recursive=False):
-        p_html = str(p)
-        if estimate_tokens(p_html) > max_tokens:
-            translated_p = translate_html_preserve_tags(p_html, translator_func, log_callback, max_tokens)
-        else:
-            try:
-                translated_p = translator_func(p_html)
-            except Exception as e:
-                log_callback(f"[P ERROR] {e}")
-                translated_p = p_html
-        p.clear()
-        p.append(BeautifulSoup(translated_p, "html.parser"))
-
-    return str(soup)
+    return translated_html
 
     # Translate direct text in <li> and <p> only, not tags or children tags
     def translate_tag_text(tag):
