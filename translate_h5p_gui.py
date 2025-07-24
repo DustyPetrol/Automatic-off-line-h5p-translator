@@ -26,51 +26,53 @@ def translate_local_ai(text):
     )
     return tokenizer.decode(generated[0], skip_special_tokens=True)
 
-def translate_html_preserve_tags(html, translator_func, log_callback):
+def translate_html_preserve_tags(html, translator_func, log_callback, max_tokens=400):
     from bs4 import BeautifulSoup
 
-    def safe_translate(block_html):
-        """Try translating a block, with retries and fallback."""
-        attempts = 2
-        for i in range(attempts):
-            try:
-                translated = translator_func(block_html)
-                return translated if translated.strip() else block_html
-            except Exception as e:
-                log_callback(f"[Retry {i+1}/{attempts}] Error: {str(e)[:80]}")
-        return block_html  # fallback
+    def estimate_tokens(text):
+        return max(1, len(text) // 4)
 
-    try:
-        soup = BeautifulSoup(html, "html.parser")
-        blocks = soup.find_all(['ol', 'ul', 'p', 'li', 'h1', 'h2', 'h3', 'h4'])
-        if not blocks:
-            blocks = [soup]
+    html = html.strip()
+    if estimate_tokens(html) <= max_tokens:
+        try:
+            translated = translator_func(html)
+            log_callback(f"[HTML] {BeautifulSoup(html, 'html.parser').text.strip()} → {BeautifulSoup(translated, 'html.parser').text.strip()[:80]}")
+            return translated
+        except Exception as e:
+            log_callback(f"[FATAL] HTML translation failed: {html[:60]}... ({e})")
+            return html
 
-        translated_fragments = []
-
-        for block in blocks:
-            block_html = str(block).strip()
-            if not block_html:
-                continue
-
-            translated = safe_translate(block_html)
-
-            original_len = len(BeautifulSoup(block_html, "html.parser").text.strip())
-            translated_len = len(BeautifulSoup(translated, "html.parser").text.strip())
-
-            if translated_len < 0.5 * original_len:
-                log_callback(f"[WARN] Truncated block (keeping original) → {translated_len} vs {original_len}")
-                translated_fragments.append(block_html)
+    soup = BeautifulSoup(html, "html.parser")
+    # If root contains <ol> or <ul>, translate each <li> separately, then reconstruct
+    for tag in soup.find_all(['ol', 'ul']):
+        for li in tag.find_all('li', recursive=False):
+            inner_html = ''.join(str(x) for x in li.contents)
+            if estimate_tokens(inner_html) > max_tokens:
+                translated_inner = translate_html_preserve_tags(inner_html, translator_func, log_callback, max_tokens)
             else:
-                translated_fragments.append(translated)
-                log_callback(f"[Block] {block.text.strip()} → {BeautifulSoup(translated, 'html.parser').text.strip()[:80]}")
+                try:
+                    translated_inner = translator_func(inner_html)
+                except Exception as e:
+                    log_callback(f"[LI ERROR] {e}")
+                    translated_inner = inner_html
+            li.clear()
+            li.append(BeautifulSoup(translated_inner, "html.parser"))
 
-        return "\n".join(translated_fragments)
+    # Also translate top-level <p> tags
+    for p in soup.find_all('p', recursive=False):
+        p_html = ''.join(str(x) for x in p.contents)
+        if estimate_tokens(p_html) > max_tokens:
+            translated_p = translate_html_preserve_tags(p_html, translator_func, log_callback, max_tokens)
+        else:
+            try:
+                translated_p = translator_func(p_html)
+            except Exception as e:
+                log_callback(f"[P ERROR] {e}")
+                translated_p = p_html
+        p.clear()
+        p.append(BeautifulSoup(translated_p, "html.parser"))
 
-    except Exception as e:
-        log_callback(f"[FATAL] Entire HTML block failed: {html[:60]}... ({e})")
-        return html
-
+    return str(soup)
 
 
 
@@ -86,27 +88,8 @@ def translate_json_fields(data, translator_func, log_callback, translated_flags=
             if path in translated_flags:
                 continue
 
-            if key == "answers" and isinstance(value, list):
-                for idx, answer in enumerate(value):
-                    answer_path = f"{path}[{idx}]"
-                    if isinstance(answer, dict) and "text" in answer:
-                        orig = answer["text"]
-                        sub_path = f"{answer_path}/text"
-                        if sub_path in translated_flags:
-                            continue
-                        if isinstance(orig, str) and orig.strip():
-                            try:
-                                translated = translator_func(orig)
-                                answer["text"] = translated
-                                translated_flags.add(sub_path)
-                                log_callback(f"[Answer] {orig.strip()} → {translated.strip()}")
-                            except Exception as e:
-                                log_callback(f"[Error] Translating answer[{idx}] failed: {orig[:40]}... ({e})")
-                    elif isinstance(answer, (dict, list)):
-                        translate_json_fields(answer, translator_func, log_callback, translated_flags, answer_path)
-            elif isinstance(value, dict) or isinstance(value, list):
-                translate_json_fields(value, translator_func, log_callback, translated_flags, path)
-            elif key in translatable_keys and isinstance(value, str) and value.strip():
+            # Only handle translation here; do not recurse further for these keys
+            if key in translatable_keys and isinstance(value, str) and value.strip():
                 try:
                     if "<" in value and ">" in value:
                         translated = translate_html_preserve_tags(value, translator_func, log_callback)
@@ -117,6 +100,31 @@ def translate_json_fields(data, translator_func, log_callback, translated_flags=
                     translated_flags.add(path)
                 except Exception as e:
                     log_callback(f"[WARN] Couldn't translate {key} at {path}: {e}")
+                continue
+
+            # Special case for 'answers' key
+            if key == "answers" and isinstance(value, list):
+                for idx, answer in enumerate(value):
+                    answer_path = f"{path}[{idx}]"
+                    if isinstance(answer, dict) and "text" in answer:
+                        sub_path = f"{answer_path}/text"
+                        if sub_path not in translated_flags:
+                            orig = answer["text"]
+                            if isinstance(orig, str) and orig.strip():
+                                try:
+                                    translated = translator_func(orig)
+                                    answer["text"] = translated
+                                    translated_flags.add(sub_path)
+                                    log_callback(f"[Answer] {orig.strip()} → {translated.strip()}")
+                                except Exception as e:
+                                    log_callback(f"[Error] Translating answer[{idx}] failed: {orig[:40]}... ({e})")
+                    elif isinstance(answer, (dict, list)):
+                        translate_json_fields(answer, translator_func, log_callback, translated_flags, answer_path)
+                continue
+
+            # For nested dict/list, recurse
+            if isinstance(value, (dict, list)):
+                translate_json_fields(value, translator_func, log_callback, translated_flags, path)
 
     elif isinstance(data, list):
         for idx, item in enumerate(data):
