@@ -18,6 +18,11 @@ tokenizer = M2M100Tokenizer.from_pretrained(MODEL_NAME)
 model = M2M100ForConditionalGeneration.from_pretrained(MODEL_NAME).to(device)
 tokenizer.src_lang = SOURCE_LANG
 
+def sanitize_html(html):
+    from bs4 import BeautifulSoup
+    soup = BeautifulSoup(html, "html.parser")
+    return str(soup)
+
 def translate_local_ai(text):
     encoded = tokenizer(text, return_tensors="pt").to(device)
     generated = model.generate(
@@ -32,35 +37,36 @@ def translate_html_preserve_tags(html, translator_func, log_callback, max_tokens
     def estimate_tokens(text):
         return max(1, len(text) // 4)
 
-    html = html.strip()
+    html = sanitize_html(html)
     if estimate_tokens(html) <= max_tokens:
         try:
             translated = translator_func(html)
-            log_callback(f"[HTML] {BeautifulSoup(html, 'html.parser').text.strip()} → {BeautifulSoup(translated, 'html.parser').text.strip()[:80]}")
+            log_callback(f"[HTML] {BeautifulSoup(html, 'html.parser').get_text().strip()} → {BeautifulSoup(translated, 'html.parser').get_text().strip()[:80]}")
             return translated
         except Exception as e:
             log_callback(f"[FATAL] HTML translation failed: {html[:60]}... ({e})")
             return html
 
     soup = BeautifulSoup(html, "html.parser")
-    # If root contains <ol> or <ul>, translate each <li> separately, then reconstruct
+
+    # Handle lists
     for tag in soup.find_all(['ol', 'ul']):
         for li in tag.find_all('li', recursive=False):
-            inner_html = ''.join(str(x) for x in li.contents)
-            if estimate_tokens(inner_html) > max_tokens:
-                translated_inner = translate_html_preserve_tags(inner_html, translator_func, log_callback, max_tokens)
+            li_html = str(li)
+            if estimate_tokens(li_html) > max_tokens:
+                translated_li = translate_html_preserve_tags(li_html, translator_func, log_callback, max_tokens)
             else:
                 try:
-                    translated_inner = translator_func(inner_html)
+                    translated_li = translator_func(li_html)
                 except Exception as e:
                     log_callback(f"[LI ERROR] {e}")
-                    translated_inner = inner_html
+                    translated_li = li_html
             li.clear()
-            li.append(BeautifulSoup(translated_inner, "html.parser"))
+            li.append(BeautifulSoup(translated_li, "html.parser"))
 
-    # Also translate top-level <p> tags
+    # Top-level <p> chunks
     for p in soup.find_all('p', recursive=False):
-        p_html = ''.join(str(x) for x in p.contents)
+        p_html = str(p)
         if estimate_tokens(p_html) > max_tokens:
             translated_p = translate_html_preserve_tags(p_html, translator_func, log_callback, max_tokens)
         else:
@@ -74,7 +80,41 @@ def translate_html_preserve_tags(html, translator_func, log_callback, max_tokens
 
     return str(soup)
 
+    # Translate direct text in <li> and <p> only, not tags or children tags
+    def translate_tag_text(tag):
+        for child in tag.children:
+            if isinstance(child, str):
+                raw = child.strip()
+                if raw:
+                    try:
+                        translated = translator_func(raw)
+                        tag.string.replace_with(translated)
+                    except Exception as e:
+                        log_callback(f"[TEXT ERROR] {e}")
+                        continue
+            elif hasattr(child, 'text') and child.text.strip():
+                try:
+                    # Recursively translate the text in child tags if not too big
+                    if estimate_tokens(child.text) <= max_tokens:
+                        translated = translator_func(child.text)
+                        child.string.replace_with(translated)
+                    else:
+                        # If too big, recurse
+                        translate_tag_text(child)
+                except Exception as e:
+                    log_callback(f"[TAG ERROR] {e}")
+                    continue
 
+    # If soup contains <ol> or <ul>, process each <li>
+    for tag in soup.find_all(['ol', 'ul']):
+        for li in tag.find_all('li', recursive=False):
+            translate_tag_text(li)
+
+    # Also translate top-level <p> tags
+    for p in soup.find_all('p', recursive=False):
+        translate_tag_text(p)
+
+    return str(soup)
 
 def translate_json_fields(data, translator_func, log_callback, translated_flags=None, current_path="root"):
     if translated_flags is None:
