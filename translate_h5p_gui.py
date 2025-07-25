@@ -81,34 +81,49 @@ def translate_single_chunk(text):
         return text
 
 def extract_and_translate_text_nodes(soup, translator_func, log_callback):
-    """Extract text nodes, translate them, and put them back"""
+    """Extract text nodes, translate them, and put them back with proper spacing"""
     text_nodes = []
     
-    # Find all text nodes
+    # Find all text nodes, preserving original spacing
     def find_text_nodes(element):
         for child in element.children:
             if isinstance(child, NavigableString):
-                text = str(child).strip()
-                if text and child.parent.name not in ['script', 'style']:
-                    text_nodes.append(child)
+                original_text = str(child)
+                # Keep nodes that have meaningful content (including whitespace-only if needed for spacing)
+                if original_text and child.parent.name not in ['script', 'style']:
+                    text_nodes.append({
+                        'node': child,
+                        'text': original_text,
+                        'stripped': original_text.strip(),
+                        'leading_space': original_text.startswith(' ') or original_text.startswith('\t'),
+                        'trailing_space': original_text.endswith(' ') or original_text.endswith('\t')
+                    })
             elif hasattr(child, 'children'):
                 find_text_nodes(child)
     
     find_text_nodes(soup)
     
-    # Translate each text node
-    for text_node in text_nodes:
-        original_text = str(text_node).strip()
-        if original_text and len(original_text) > 1:
+    # Translate each meaningful text node
+    for text_info in text_nodes:
+        stripped_text = text_info['stripped']
+        if stripped_text and len(stripped_text) > 1:
             try:
-                translated_text = translator_func(original_text)
-                log_callback(f"[TEXT] {original_text[:40]}... → {translated_text[:40]}...")
-                text_node.replace_with(translated_text)
+                translated_text = translator_func(stripped_text)
+                
+                # Preserve original spacing
+                final_text = translated_text
+                if text_info['leading_space']:
+                    final_text = ' ' + final_text
+                if text_info['trailing_space']:
+                    final_text = final_text + ' '
+                
+                log_callback(f"[TEXT] '{text_info['text']}' → '{final_text}'")
+                text_info['node'].replace_with(final_text)
             except Exception as e:
-                log_callback(f"[WARN] Failed to translate: {original_text[:30]}... ({e})")
+                log_callback(f"[WARN] Failed to translate: {stripped_text[:30]}... ({e})")
 
-def translate_html_by_text_extraction(html, translator_func, log_callback):
-    """New approach: extract text, translate, rebuild"""
+def translate_html_by_element_context(html, translator_func, log_callback):
+    """Translate by element context, preserving inline formatting"""
     if not html or not html.strip():
         return html
     
@@ -119,25 +134,55 @@ def translate_html_by_text_extraction(html, translator_func, log_callback):
         return translated
     
     try:
-        # Parse HTML
         soup = BeautifulSoup(html, "html.parser")
         
-        # Extract and translate all text nodes
-        extract_and_translate_text_nodes(soup, translator_func, log_callback)
+        # Find elements with text content to translate
+        for element in soup.find_all(['li', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']):
+            # Get full text content
+            full_text = element.get_text()
+            if full_text.strip() and len(full_text.strip()) > 1:
+                try:
+                    # Translate the complete text
+                    translated_text = translator_func(full_text.strip())
+                    
+                    # Check if element has inline formatting
+                    has_inline_tags = element.find(['strong', 'b', 'em', 'i', 'u', 'br'])
+                    
+                    if not has_inline_tags:
+                        # Simple case: just replace text
+                        element.clear()
+                        element.string = translated_text
+                    else:
+                        # Complex case: try to preserve some formatting
+                        # Get strong/bold text positions
+                        strong_texts = []
+                        for strong in element.find_all(['strong', 'b']):
+                            strong_texts.append(strong.get_text().strip())
+                        
+                        # Clear and rebuild with basic structure
+                        element.clear()
+                        
+                        # If we have line breaks in original, try to preserve paragraph structure
+                        if '<br' in str(element) or '\n' in full_text:
+                            # Split translation by likely break points
+                            parts = re.split(r'[.!?]\s+', translated_text)
+                            for i, part in enumerate(parts):
+                                if part.strip():
+                                    if i > 0:
+                                        element.append(soup.new_tag('br'))
+                                    element.append(part.strip())
+                        else:
+                            element.append(translated_text)
+                    
+                    log_callback(f"[ELEMENT] {full_text[:40]}... → {translated_text[:40]}...")
+                    
+                except Exception as e:
+                    log_callback(f"[WARN] Element translation failed: {e}")
         
-        # Return the reconstructed HTML
-        result = str(soup)
-        
-        # Basic validation - make sure we have content
-        result_soup = BeautifulSoup(result, "html.parser")
-        if not result_soup.get_text().strip():
-            log_callback("[WARN] Translation resulted in empty content, using original")
-            return html
-        
-        return result
+        return str(soup)
         
     except Exception as e:
-        log_callback(f"[ERROR] HTML translation failed: {e}")
+        log_callback(f"[ERROR] Element translation failed: {e}")
         return html
 
 def translate_html_simple_fallback(html, translator_func, log_callback):
@@ -183,20 +228,34 @@ def translate_html_robust(html, translator_func, log_callback):
     if not html or not html.strip():
         return html
     
-    # Strategy 1: Text node extraction
+    # Strategy 1: Element context translation
     try:
-        result = translate_html_by_text_extraction(html, translator_func, log_callback)
+        result = translate_html_by_element_context(html, translator_func, log_callback)
         
         # Validate result
         test_soup = BeautifulSoup(result, "html.parser")
         if test_soup.get_text().strip() and len(test_soup.get_text()) > 10:
             return result
         else:
-            log_callback("[WARN] Strategy 1 failed, trying fallback")
+            log_callback("[WARN] Strategy 1 failed, trying text extraction")
     except Exception as e:
         log_callback(f"[WARN] Strategy 1 error: {e}")
     
-    # Strategy 2: Simple fallback
+    # Strategy 2: Text node extraction (original approach)
+    try:
+        soup = BeautifulSoup(html, "html.parser")
+        extract_and_translate_text_nodes(soup, translator_func, log_callback)
+        result = str(soup)
+        
+        test_soup = BeautifulSoup(result, "html.parser")
+        if test_soup.get_text().strip() and len(test_soup.get_text()) > 10:
+            return result
+        else:
+            log_callback("[WARN] Strategy 2 failed, trying fallback")
+    except Exception as e:
+        log_callback(f"[WARN] Strategy 2 error: {e}")
+    
+    # Strategy 3: Simple fallback
     try:
         result = translate_html_simple_fallback(html, translator_func, log_callback)
         return result
