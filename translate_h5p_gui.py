@@ -60,6 +60,9 @@ def translate_local_ai(text):
 def translate_single_chunk(text):
     """Translate a single chunk with error handling"""
     try:
+        log_text = text[:50] + "..." if len(text) > 50 else text
+        print(f"[TRANSLATE-DEBUG] Input: '{log_text}'")
+        
         encoded = tokenizer(text, return_tensors="pt", truncation=True, max_length=256).to(device)
         generated = model.generate(
             **encoded,
@@ -71,13 +74,21 @@ def translate_single_chunk(text):
         )
         result = tokenizer.decode(generated[0], skip_special_tokens=True)
         
+        log_result = result[:50] + "..." if len(result) > 50 else result
+        print(f"[TRANSLATE-DEBUG] Output: '{log_result}'")
+        
         # Verify result is reasonable
         if len(result.strip()) < 3:
+            print(f"[TRANSLATE-DEBUG] Result too short, using original")
             return text  # Fallback to original
         
+        # Check if translation actually happened
+        if result.strip().lower() == text.strip().lower():
+            print(f"[TRANSLATE-DEBUG] No translation occurred, result identical to input")
+            
         return result
     except Exception as e:
-        print(f"Translation error: {e}")
+        print(f"[TRANSLATE-ERROR] Translation error: {e}")
         return text
 
 def extract_and_translate_text_nodes(soup, translator_func, log_callback):
@@ -135,54 +146,54 @@ def translate_html_by_element_context(html, translator_func, log_callback):
     
     try:
         soup = BeautifulSoup(html, "html.parser")
+        log_callback(f"[HTML-DEBUG] Processing HTML: {html[:60]}...")
         
         # Find elements with text content to translate
-        for element in soup.find_all(['li', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']):
+        translated_any = False
+        for element in soup.find_all(['li', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div']):
             # Get full text content
             full_text = element.get_text()
             if full_text.strip() and len(full_text.strip()) > 1:
                 try:
+                    log_callback(f"[HTML-DEBUG] Translating element text: '{full_text[:50]}...'")
                     # Translate the complete text
                     translated_text = translator_func(full_text.strip())
+                    log_callback(f"[HTML-DEBUG] Translation result: '{translated_text[:50]}...'")
                     
-                    # Check if element has inline formatting
-                    has_inline_tags = element.find(['strong', 'b', 'em', 'i', 'u', 'br'])
-                    
-                    if not has_inline_tags:
-                        # Simple case: just replace text
-                        element.clear()
-                        element.string = translated_text
-                    else:
-                        # Complex case: try to preserve some formatting
-                        # Get strong/bold text positions
-                        strong_texts = []
-                        for strong in element.find_all(['strong', 'b']):
-                            strong_texts.append(strong.get_text().strip())
-                        
+                    # Check if translation actually changed
+                    if translated_text.strip() != full_text.strip():
+                        log_callback(f"[HTML-DEBUG] Translation changed, updating element")
                         # Clear and rebuild with basic structure
                         element.clear()
-                        
-                        # If we have line breaks in original, try to preserve paragraph structure
-                        if '<br' in str(element) or '\n' in full_text:
-                            # Split translation by likely break points
-                            parts = re.split(r'[.!?]\s+', translated_text)
-                            for i, part in enumerate(parts):
-                                if part.strip():
-                                    if i > 0:
-                                        element.append(soup.new_tag('br'))
-                                    element.append(part.strip())
-                        else:
-                            element.append(translated_text)
-                    
-                    log_callback(f"[ELEMENT] {full_text[:40]}... → {translated_text[:40]}...")
+                        element.string = translated_text
+                        translated_any = True
+                    else:
+                        log_callback(f"[HTML-DEBUG] Translation unchanged, keeping original")
                     
                 except Exception as e:
-                    log_callback(f"[WARN] Element translation failed: {e}")
+                    log_callback(f"[HTML-ERROR] Element translation failed: {e}")
         
-        return str(soup)
+        result = str(soup)
+        log_callback(f"[HTML-DEBUG] Final result: {result[:60]}...")
+        
+        if translated_any:
+            return result
+        else:
+            log_callback(f"[HTML-WARN] No elements were translated, trying simple text extraction")
+            # Fallback: just extract and translate the plain text
+            plain_text = soup.get_text().strip()
+            if plain_text:
+                try:
+                    translated_plain = translator_func(plain_text)
+                    if translated_plain.strip() != plain_text:
+                        log_callback(f"[HTML-FALLBACK] Using plain text translation")
+                        return f"<div>{translated_plain}</div>"
+                except Exception as e:
+                    log_callback(f"[HTML-FALLBACK-ERROR] {e}")
+            return html
         
     except Exception as e:
-        log_callback(f"[ERROR] Element translation failed: {e}")
+        log_callback(f"[HTML-ERROR] Element translation failed: {e}")
         return html
 
 def translate_html_simple_fallback(html, translator_func, log_callback):
@@ -267,13 +278,25 @@ def translate_json_fields(data, translator_func, log_callback, translated_flags=
     if translated_flags is None:
         translated_flags = set()
 
-    translatable_keys = {"text", "question", "title", "alt", "label", "contentName"}
+    translatable_keys = {
+        "text", "question", "title", "alt", "label", "contentName",
+        "introduction", "startButtonText", "checkAnswerButton", "submitAnswerButton", 
+        "showSolutionButton", "tryAgainButton", "tipsLabel", "scoreBarLabel",
+        "tipAvailable", "feedbackAvailable", "readFeedback", "wrongAnswer", 
+        "correctAnswer", "shouldCheck", "shouldNotCheck", "noInput",
+        "header", "body", "cancelLabel", "confirmLabel", "tip", 
+        "chosenFeedback", "notChosenFeedback"
+    }
 
     if isinstance(data, dict):
         for key, value in data.items():
             path = f"{current_path}/{key}"
             if path in translated_flags:
                 continue
+
+            # Debug logging for path tracking
+            if key in ["answers", "questions"] and isinstance(value, list):
+                log_callback(f"[DEBUG] Found {key} array at path: {path}")
 
             if key in translatable_keys and isinstance(value, str) and value.strip():
                 try:
@@ -295,32 +318,56 @@ def translate_json_fields(data, translator_func, log_callback, translated_flags=
                     log_callback(f"[WARN] Couldn't translate {key} at {path}: {e}")
                 continue
 
+            # Special handling for answers arrays
             if key == "answers" and isinstance(value, list):
+                log_callback(f"[DEBUG] Processing answers array with {len(value)} items")
                 for idx, answer in enumerate(value):
                     answer_path = f"{path}[{idx}]"
-                    if isinstance(answer, dict) and "text" in answer:
-                        sub_path = f"{answer_path}/text"
-                        if sub_path not in translated_flags:
-                            orig = answer["text"]
-                            if isinstance(orig, str) and orig.strip():
-                                try:
-                                    if "<" in orig and ">" in orig:
-                                        translated = translate_html_robust(orig, translator_func, log_callback)
-                                    else:
-                                        translated = translator_func(orig)
-                                    
-                                    if len(translated.strip()) >= 3:
-                                        answer["text"] = translated
-                                        translated_flags.add(sub_path)
-                                        log_callback(f"[Answer] {orig[:30]}... → {translated[:30]}...")
-                                    else:
-                                        log_callback(f"[WARN] Answer translation too short, keeping original")
-                                except Exception as e:
-                                    log_callback(f"[Error] Translating answer[{idx}] failed: {orig[:40]}... ({e})")
-                    elif isinstance(answer, (dict, list)):
+                    log_callback(f"[DEBUG] Processing answer {idx} at {answer_path}")
+                    
+                    if isinstance(answer, dict):
+                        # Handle the "text" field in answers
+                        if "text" in answer:
+                            sub_path = f"{answer_path}/text"
+                            if sub_path not in translated_flags:
+                                orig = answer["text"]
+                                if isinstance(orig, str) and orig.strip():
+                                    try:
+                                        log_callback(f"[DEBUG] Translating answer text: {orig[:60]}...")
+                                        if "<" in orig and ">" in orig:
+                                            translated = translate_html_robust(orig, translator_func, log_callback)
+                                        else:
+                                            translated = translator_func(orig)
+                                        
+                                        if len(translated.strip()) >= 3:
+                                            answer["text"] = translated
+                                            translated_flags.add(sub_path)
+                                            log_callback(f"[ANSWER] {orig[:50]}... → {translated[:50]}...")
+                                        else:
+                                            log_callback(f"[WARN] Answer translation too short, keeping original")
+                                    except Exception as e:
+                                        log_callback(f"[ERROR] Translating answer[{idx}] text failed: {orig[:40]}... ({e})")
+                                else:
+                                    log_callback(f"[DEBUG] Answer text empty or invalid: '{orig}'")
+                        else:
+                            log_callback(f"[DEBUG] Answer {idx} has no 'text' field")
+                        
+                        # Also recursively process the rest of the answer object (for nested structures)
                         translate_json_fields(answer, translator_func, log_callback, translated_flags, answer_path)
+                    else:
+                        log_callback(f"[DEBUG] Answer {idx} is not a dict: {type(answer)}")
                 continue
 
+            # Special handling for questions arrays
+            if key == "questions" and isinstance(value, list):
+                log_callback(f"[DEBUG] Processing questions array with {len(value)} items")
+                for idx, question in enumerate(value):
+                    question_path = f"{path}[{idx}]"
+                    log_callback(f"[DEBUG] Processing question {idx} at {question_path}")
+                    translate_json_fields(question, translator_func, log_callback, translated_flags, question_path)
+                continue
+
+            # Regular recursive processing for other nested structures
             if isinstance(value, (dict, list)):
                 translate_json_fields(value, translator_func, log_callback, translated_flags, path)
 
