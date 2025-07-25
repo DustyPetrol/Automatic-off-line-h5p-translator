@@ -4,10 +4,11 @@ import shutil
 import zipfile
 import tkinter as tk
 from tkinter import filedialog, messagebox, scrolledtext
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, NavigableString
 from transformers import M2M100ForConditionalGeneration, M2M100Tokenizer
 import torch
 import threading
+import re
 
 # === Local AI Translator Setup ===
 MODEL_NAME = "facebook/m2m100_418M"
@@ -17,118 +18,191 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 tokenizer = M2M100Tokenizer.from_pretrained(MODEL_NAME)
 model = M2M100ForConditionalGeneration.from_pretrained(MODEL_NAME).to(device)
 tokenizer.src_lang = SOURCE_LANG
-def sanitize_html(html):
-    from bs4 import BeautifulSoup
-    soup = BeautifulSoup(html, "html.parser")
-    return str(soup)
 
 def translate_local_ai(text):
-    encoded = tokenizer(text, return_tensors="pt").to(device)
-    generated = model.generate(
-        **encoded,
-        forced_bos_token_id=tokenizer.lang_code_to_id[TARGET_LANG]
-    )
-    return tokenizer.decode(generated[0], skip_special_tokens=True)
-
-def translate_html_preserve_tags(html, translator_func, log_callback, max_tokens=400):
-    from bs4 import BeautifulSoup
-
-    def estimate_tokens(text):
-        # Roughly 4 chars per token
-        return max(1, len(text) // 4)
+    """Translation with length and quality controls"""
+    if not text or not text.strip():
+        return text
     
-    html = sanitize_html(html)
-    if estimate_tokens(html) <= max_tokens:
-        try:
-            translated = translator_func(html)
-            log_callback(f"[HTML] {BeautifulSoup(html, 'html.parser').get_text().strip()} → {BeautifulSoup(translated, 'html.parser').get_text().strip()[:80]}")
-            return translated
-        except Exception as e:
-            log_callback(f"[FATAL] HTML translation failed: {html[:60]}... ({e})")
-            return html
-
-    soup = BeautifulSoup(html, "html.parser")
-    translated_html = ""
-
-    # Try to find a single parent tag that contains all content
-    parent = None
-    for tag in soup.contents:
-        if hasattr(tag, "name"):
-            parent = tag
-            break
+    # Clean up input text
+    text = text.strip()
     
-    if parent and parent.name in ["ol", "ul"]:
-        # Translate each <li> as an HTML string, then reassemble
-        for li in parent.find_all("li", recursive=False):
-            li_html = str(li)
-            if estimate_tokens(li_html) > max_tokens:
-                translated_li = translate_html_preserve_tags(li_html, translator_func, log_callback, max_tokens)
+    # Limit input length to prevent truncation
+    max_input_length = 200  # Conservative limit
+    if len(text) > max_input_length:
+        # Split by sentences and translate parts
+        sentences = re.split(r'([.!?]+)', text)
+        translated_parts = []
+        current_chunk = ""
+        
+        for i in range(0, len(sentences), 2):
+            sentence = sentences[i] if i < len(sentences) else ""
+            punctuation = sentences[i+1] if i+1 < len(sentences) else ""
+            full_sentence = sentence + punctuation
+            
+            if len(current_chunk + full_sentence) > max_input_length:
+                if current_chunk:
+                    translated_parts.append(translate_single_chunk(current_chunk.strip()))
+                    current_chunk = full_sentence
+                else:
+                    # Single sentence too long, translate as-is
+                    translated_parts.append(translate_single_chunk(full_sentence.strip()))
             else:
-                try:
-                    translated_li = translator_func(li_html)
-                except Exception as e:
-                    log_callback(f"[LI ERROR] {e}")
-                    translated_li = li_html
-            li.clear()
-            li.append(BeautifulSoup(translated_li, "html.parser"))
-        translated_html = str(soup)
+                current_chunk += full_sentence
+        
+        if current_chunk:
+            translated_parts.append(translate_single_chunk(current_chunk.strip()))
+        
+        return " ".join(translated_parts)
     else:
-        # Otherwise, translate each top-level <p> or fallback to lines
-        blocks = soup.find_all("p", recursive=False)
-        if not blocks:
-            # fallback: lines
-            blocks = [BeautifulSoup(f"<p>{line}</p>", "html.parser") for line in html.split('\n') if line.strip()]
-        for block in blocks:
-            block_html = str(block)
-            if estimate_tokens(block_html) > max_tokens:
-                translated_block = translate_html_preserve_tags(block_html, translator_func, log_callback, max_tokens)
-            else:
-                try:
-                    translated_block = translator_func(block_html)
-                except Exception as e:
-                    log_callback(f"[P ERROR] {e}")
-                    translated_block = block_html
-            block.clear()
-            block.append(BeautifulSoup(translated_block, "html.parser"))
-        translated_html = str(soup)
+        return translate_single_chunk(text)
 
-    return translated_html
+def translate_single_chunk(text):
+    """Translate a single chunk with error handling"""
+    try:
+        encoded = tokenizer(text, return_tensors="pt", truncation=True, max_length=256).to(device)
+        generated = model.generate(
+            **encoded,
+            forced_bos_token_id=tokenizer.lang_code_to_id[TARGET_LANG],
+            max_length=400,  # Increased max length
+            num_beams=3,     # Better quality
+            early_stopping=True,
+            pad_token_id=tokenizer.pad_token_id
+        )
+        result = tokenizer.decode(generated[0], skip_special_tokens=True)
+        
+        # Verify result is reasonable
+        if len(result.strip()) < 3:
+            return text  # Fallback to original
+        
+        return result
+    except Exception as e:
+        print(f"Translation error: {e}")
+        return text
 
-    # Translate direct text in <li> and <p> only, not tags or children tags
-    def translate_tag_text(tag):
-        for child in tag.children:
-            if isinstance(child, str):
-                raw = child.strip()
-                if raw:
-                    try:
-                        translated = translator_func(raw)
-                        tag.string.replace_with(translated)
-                    except Exception as e:
-                        log_callback(f"[TEXT ERROR] {e}")
-                        continue
-            elif hasattr(child, 'text') and child.text.strip():
-                try:
-                    # Recursively translate the text in child tags if not too big
-                    if estimate_tokens(child.text) <= max_tokens:
-                        translated = translator_func(child.text)
-                        child.string.replace_with(translated)
-                    else:
-                        # If too big, recurse
-                        translate_tag_text(child)
-                except Exception as e:
-                    log_callback(f"[TAG ERROR] {e}")
-                    continue
+def extract_and_translate_text_nodes(soup, translator_func, log_callback):
+    """Extract text nodes, translate them, and put them back"""
+    text_nodes = []
+    
+    # Find all text nodes
+    def find_text_nodes(element):
+        for child in element.children:
+            if isinstance(child, NavigableString):
+                text = str(child).strip()
+                if text and child.parent.name not in ['script', 'style']:
+                    text_nodes.append(child)
+            elif hasattr(child, 'children'):
+                find_text_nodes(child)
+    
+    find_text_nodes(soup)
+    
+    # Translate each text node
+    for text_node in text_nodes:
+        original_text = str(text_node).strip()
+        if original_text and len(original_text) > 1:
+            try:
+                translated_text = translator_func(original_text)
+                log_callback(f"[TEXT] {original_text[:40]}... → {translated_text[:40]}...")
+                text_node.replace_with(translated_text)
+            except Exception as e:
+                log_callback(f"[WARN] Failed to translate: {original_text[:30]}... ({e})")
 
-    # If soup contains <ol> or <ul>, process each <li>
-    for tag in soup.find_all(['ol', 'ul']):
-        for li in tag.find_all('li', recursive=False):
-            translate_tag_text(li)
+def translate_html_by_text_extraction(html, translator_func, log_callback):
+    """New approach: extract text, translate, rebuild"""
+    if not html or not html.strip():
+        return html
+    
+    # Handle plain text
+    if "<" not in html or ">" not in html:
+        translated = translator_func(html)
+        log_callback(f"[PLAIN] {html[:40]}... → {translated[:40]}...")
+        return translated
+    
+    try:
+        # Parse HTML
+        soup = BeautifulSoup(html, "html.parser")
+        
+        # Extract and translate all text nodes
+        extract_and_translate_text_nodes(soup, translator_func, log_callback)
+        
+        # Return the reconstructed HTML
+        result = str(soup)
+        
+        # Basic validation - make sure we have content
+        result_soup = BeautifulSoup(result, "html.parser")
+        if not result_soup.get_text().strip():
+            log_callback("[WARN] Translation resulted in empty content, using original")
+            return html
+        
+        return result
+        
+    except Exception as e:
+        log_callback(f"[ERROR] HTML translation failed: {e}")
+        return html
 
-    # Also translate top-level <p> tags
-    for p in soup.find_all('p', recursive=False):
-        translate_tag_text(p)
+def translate_html_simple_fallback(html, translator_func, log_callback):
+    """Ultra-simple fallback: just translate the plain text content"""
+    try:
+        soup = BeautifulSoup(html, "html.parser")
+        plain_text = soup.get_text()
+        
+        if not plain_text.strip():
+            return html
+        
+        # Translate just the text
+        translated_text = translator_func(plain_text)
+        log_callback(f"[FALLBACK] {plain_text[:40]}... → {translated_text[:40]}...")
+        
+        # Try to put it back in similar structure
+        if soup.find('ol'):
+            # It's a list - split by likely list items
+            items = re.split(r'\n\s*(?=\d+\.|\w+\s*\()', translated_text)
+            result = "<ol>"
+            for item in items:
+                if item.strip():
+                    result += f"<li><p>{item.strip()}</p></li>"
+            result += "</ol>"
+            return result
+        elif soup.find('p'):
+            # Wrap in paragraphs
+            paragraphs = translated_text.split('\n\n')
+            result = ""
+            for para in paragraphs:
+                if para.strip():
+                    result += f"<p>{para.strip()}</p>"
+            return result
+        else:
+            return f"<p>{translated_text}</p>"
+    
+    except Exception as e:
+        log_callback(f"[ERROR] Fallback translation failed: {e}")
+        return html
 
-    return str(soup)
+def translate_html_robust(html, translator_func, log_callback):
+    """Robust HTML translation with multiple fallback strategies"""
+    if not html or not html.strip():
+        return html
+    
+    # Strategy 1: Text node extraction
+    try:
+        result = translate_html_by_text_extraction(html, translator_func, log_callback)
+        
+        # Validate result
+        test_soup = BeautifulSoup(result, "html.parser")
+        if test_soup.get_text().strip() and len(test_soup.get_text()) > 10:
+            return result
+        else:
+            log_callback("[WARN] Strategy 1 failed, trying fallback")
+    except Exception as e:
+        log_callback(f"[WARN] Strategy 1 error: {e}")
+    
+    # Strategy 2: Simple fallback
+    try:
+        result = translate_html_simple_fallback(html, translator_func, log_callback)
+        return result
+    except Exception as e:
+        log_callback(f"[ERROR] All strategies failed: {e}")
+        return html
 
 def translate_json_fields(data, translator_func, log_callback, translated_flags=None, current_path="root"):
     if translated_flags is None:
@@ -142,21 +216,26 @@ def translate_json_fields(data, translator_func, log_callback, translated_flags=
             if path in translated_flags:
                 continue
 
-            # Only handle translation here; do not recurse further for these keys
             if key in translatable_keys and isinstance(value, str) and value.strip():
                 try:
+                    original_value = value
                     if "<" in value and ">" in value:
-                        translated = translate_html_preserve_tags(value, translator_func, log_callback)
+                        translated = translate_html_robust(value, translator_func, log_callback)
                     else:
                         translated = translator_func(value)
-                        log_callback(f"{value.strip()} → {translated.strip()}")
+                        log_callback(f"[FIELD] {value[:50]}... → {translated[:50]}...")
+                    
+                    # Additional validation
+                    if len(translated.strip()) < 3:
+                        log_callback(f"[WARN] Translation too short, keeping original for {key}")
+                        translated = original_value
+                    
                     data[key] = translated
                     translated_flags.add(path)
                 except Exception as e:
                     log_callback(f"[WARN] Couldn't translate {key} at {path}: {e}")
                 continue
 
-            # Special case for 'answers' key
             if key == "answers" and isinstance(value, list):
                 for idx, answer in enumerate(value):
                     answer_path = f"{path}[{idx}]"
@@ -166,17 +245,23 @@ def translate_json_fields(data, translator_func, log_callback, translated_flags=
                             orig = answer["text"]
                             if isinstance(orig, str) and orig.strip():
                                 try:
-                                    translated = translator_func(orig)
-                                    answer["text"] = translated
-                                    translated_flags.add(sub_path)
-                                    log_callback(f"[Answer] {orig.strip()} → {translated.strip()}")
+                                    if "<" in orig and ">" in orig:
+                                        translated = translate_html_robust(orig, translator_func, log_callback)
+                                    else:
+                                        translated = translator_func(orig)
+                                    
+                                    if len(translated.strip()) >= 3:
+                                        answer["text"] = translated
+                                        translated_flags.add(sub_path)
+                                        log_callback(f"[Answer] {orig[:30]}... → {translated[:30]}...")
+                                    else:
+                                        log_callback(f"[WARN] Answer translation too short, keeping original")
                                 except Exception as e:
                                     log_callback(f"[Error] Translating answer[{idx}] failed: {orig[:40]}... ({e})")
                     elif isinstance(answer, (dict, list)):
                         translate_json_fields(answer, translator_func, log_callback, translated_flags, answer_path)
                 continue
 
-            # For nested dict/list, recurse
             if isinstance(value, (dict, list)):
                 translate_json_fields(value, translator_func, log_callback, translated_flags, path)
 
@@ -187,10 +272,17 @@ def translate_json_fields(data, translator_func, log_callback, translated_flags=
                 translate_json_fields(item, translator_func, log_callback, translated_flags, path)
             elif isinstance(item, str) and path not in translated_flags:
                 try:
-                    translated = translator_func(item)
-                    log_callback(f"{item.strip()} → {translated.strip()}")
-                    data[idx] = translated
-                    translated_flags.add(path)
+                    if "<" in item and ">" in item:
+                        translated = translate_html_robust(item, translator_func, log_callback)
+                    else:
+                        translated = translator_func(item)
+                    
+                    if len(translated.strip()) >= 3:
+                        data[idx] = translated
+                        translated_flags.add(path)
+                        log_callback(f"[LIST] {item[:30]}... → {translated[:30]}...")
+                    else:
+                        log_callback(f"[WARN] List item translation too short, keeping original")
                 except Exception as e:
                     log_callback(f"[WARN] Couldn't translate list item at {path}: {e}")
 
@@ -231,7 +323,7 @@ def translate_h5p(input_h5p, output_h5p, log_callback, export_raw=False):
 class TranslatorGUI:
     def __init__(self, root):
         self.root = root
-        self.root.title("H5P Translator (Local AI)")
+        self.root.title("H5P Translator (Local AI) - Robust Version")
         self.root.geometry("800x650")
 
         self.file_path = tk.StringVar()
