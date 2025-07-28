@@ -11,7 +11,10 @@ import threading
 import re
 
 # === Local AI Translator Setup ===
-MODEL_NAME = "facebook/m2m100_418M"
+# MODEL_NAME = "facebook/m2m100_418M"      # Smaller, faster, less accurate
+MODEL_NAME = "facebook/m2m100_1.2B"        # Larger, slower, more accurate
+# MODEL_NAME = "Helsinki-NLP/opus-mt-en-de" # Alternative English->German model
+
 SOURCE_LANG = "en"
 TARGET_LANG = "de"
 device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -57,8 +60,47 @@ def translate_local_ai(text):
     else:
         return translate_single_chunk(text)
 
+# === Translation Corrections Dictionary ===
+TRANSLATION_CORRECTIONS = {
+    # English -> German corrections for technical terms
+    "solder": "löten",
+    "soldering": "löten", 
+    "soldered": "gelötet",
+    "soldier": "Soldat",  # Keep this for actual military context
+    "soldator": "löten",  # Fix common mistranslation
+    # Add more technical terms as needed
+    "flux": "Flussmittel",
+    "PCB": "Leiterplatte",
+    "resistor": "Widerstand",
+    "capacitor": "Kondensator",
+    "transistor": "Transistor",
+    "LED": "LED",
+    "breadboard": "Steckbrett",
+}
+
+def apply_translation_corrections(text, corrections_dict):
+    """Apply manual corrections to translated text"""
+    corrected = text
+    for english_term, german_term in corrections_dict.items():
+        # Case-insensitive replacement, preserving original case pattern
+        import re
+        pattern = re.compile(re.escape(english_term), re.IGNORECASE)
+        
+        def replace_match(match):
+            original = match.group()
+            if original.isupper():
+                return german_term.upper()
+            elif original.istitle():
+                return german_term.capitalize()
+            else:
+                return german_term.lower()
+        
+        corrected = pattern.sub(replace_match, corrected)
+    
+    return corrected
+
 def translate_single_chunk(text):
-    """Translate a single chunk with error handling"""
+    """Translate a single chunk with error handling and corrections"""
     try:
         log_text = text[:50] + "..." if len(text) > 50 else text
         print(f"[TRANSLATE-DEBUG] Input: '{log_text}'")
@@ -74,19 +116,22 @@ def translate_single_chunk(text):
         )
         result = tokenizer.decode(generated[0], skip_special_tokens=True)
         
+        # Apply manual corrections
+        corrected_result = apply_translation_corrections(result, TRANSLATION_CORRECTIONS)
+        
         log_result = result[:50] + "..." if len(result) > 50 else result
-        print(f"[TRANSLATE-DEBUG] Output: '{log_result}'")
+        log_corrected = corrected_result[:50] + "..." if len(corrected_result) > 50 else corrected_result
+        
+        print(f"[TRANSLATE-DEBUG] Raw output: '{log_result}'")
+        if corrected_result != result:
+            print(f"[TRANSLATE-DEBUG] After corrections: '{log_corrected}'")
         
         # Verify result is reasonable
-        if len(result.strip()) < 3:
+        if len(corrected_result.strip()) < 3:
             print(f"[TRANSLATE-DEBUG] Result too short, using original")
             return text  # Fallback to original
         
-        # Check if translation actually happened
-        if result.strip().lower() == text.strip().lower():
-            print(f"[TRANSLATE-DEBUG] No translation occurred, result identical to input")
-            
-        return result
+        return corrected_result
     except Exception as e:
         print(f"[TRANSLATE-ERROR] Translation error: {e}")
         return text
