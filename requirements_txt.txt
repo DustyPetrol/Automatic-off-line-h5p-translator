@@ -1,0 +1,12 @@
+# Core ML and NLP libraries
+torch>=1.9.0
+transformers>=4.20.0
+
+# HTML parsing
+beautifulsoup4>=4.10.0
+
+# GUI (usually included with Python, but listed for completeness)
+# tkinter  # Commented out - comes with Python by default
+
+# Standard library dependencies (no installation needed)
+# os, json, shutil, zipfile, threading, re - all built into Python
