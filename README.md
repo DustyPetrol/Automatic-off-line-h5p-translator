@@ -130,30 +130,6 @@ TRANSLATION_CORRECTIONS = {
 - **RAM**: 8+ GB
 - **CPU**: Multi-core processor
 
-## Troubleshooting
-
-### Common Issues
-
-**"Model downloading takes forever"**
-- First run downloads ~2.5GB model files
-- Subsequent runs start immediately
-- Check your internet connection
-
-**"Translation seems stuck"**
-- Check the log window for progress
-- Large H5P files can take several minutes
-- GPU significantly speeds up processing
-
-**"Some text wasn't translated"**
-- The system only translates recognized content fields
-- Check logs for specific field names that were skipped
-- Add custom field names to `translatable_keys` if needed
-
-**"Translation quality is poor"**
-- Technical content may need custom corrections added
-- Consider using the larger 12B model for better quality
-- Very short phrases often translate poorly - this is normal
-
 ### Debug Mode
 
 Enable detailed logging by checking "Export translated folder as ZIP" - this creates additional debug files showing the internal JSON structure.
@@ -171,43 +147,7 @@ your-project/
 
 ## Supported H5P Content Types
 
-Tested and working with:
-- **Interactive Video**
-- **Quiz (Question Set)**  
-- **Single Choice Set**
-- **Multiple Choice**
-- **Fill in the Blanks**
-- **Drag and Drop**
-- **Timeline**
-- **Course Presentation**
-
-Should work with most H5P content types that contain translatable text fields.
-
-## Privacy & Security
-
-- **100% Local Processing**: No data sent to external servers
-- **No Internet Required**: After initial model download, works offline
-- **No Data Collection**: Application doesn't collect or store user data
-- **Open Source**: Full source code available for audit
-
-## Contributing
-
-Found a bug or want to add features?
-
-1. **Issues**: Report problems or request features via GitHub issues
-2. **Pull Requests**: Contributions welcome - please include tests
-3. **Custom Corrections**: Share domain-specific translation corrections
-
-### Adding Support for New Languages
-
-1. Update `SOURCE_LANG` and `TARGET_LANG` variables
-2. Test with sample H5P content
-3. Add language-specific correction dictionaries
-4. Submit PR with your changes
-
-## License
-
-MIT License - Use freely for personal and commercial projects.
+Should work with most H5P content types that contain translatable text fields in content.json.
 
 ## Acknowledgments
 
@@ -215,7 +155,3 @@ MIT License - Use freely for personal and commercial projects.
 - **Facebook AI**: For the M2M100 translation models  
 - **H5P Community**: For creating amazing interactive content tools
 - **BeautifulSoup**: For robust HTML parsing
-
----
-
-*Built with ❤️ for educators and content creators who need privacy-focused translation tools.*
