@@ -104,7 +104,7 @@ MODEL_NAME = "facebook/m2m100_1.2B"        # Larger, slower, more accurate (reco
 # MODEL_NAME = "Helsinki-NLP/opus-mt-en-de" # Alternative English->German model
 ```
 
-### Adding Custom Term Corrections
+### Adding Custom Term Corrections (might not work at the moment)
 
 Extend the corrections dictionary:
 
