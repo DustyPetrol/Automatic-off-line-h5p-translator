@@ -15,6 +15,22 @@ import re
 MODEL_NAME = "facebook/m2m100_1.2B"        # Larger, slower, more accurate
 # MODEL_NAME = "Helsinki-NLP/opus-mt-en-de" # Alternative English->German model
 
+# Language configurations
+SUPPORTED_LANGUAGES = {
+    "en": "English",
+    "de": "German", 
+    "fr": "French",
+    "es": "Spanish",
+    "it": "Italian",
+    "pt": "Portuguese",
+    "nl": "Dutch",
+    "pl": "Polish",
+    "ru": "Russian",
+    "zh": "Chinese",
+    "ja": "Japanese",
+    "ko": "Korean"
+}
+
 SOURCE_LANG = "en"
 TARGET_LANG = "de"
 device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -22,7 +38,7 @@ tokenizer = M2M100Tokenizer.from_pretrained(MODEL_NAME)
 model = M2M100ForConditionalGeneration.from_pretrained(MODEL_NAME).to(device)
 tokenizer.src_lang = SOURCE_LANG
 
-def translate_local_ai(text):
+def translate_local_ai(text, target_lang=TARGET_LANG):
     """Translation with length and quality controls"""
     if not text or not text.strip():
         return text
@@ -45,20 +61,20 @@ def translate_local_ai(text):
             
             if len(current_chunk + full_sentence) > max_input_length:
                 if current_chunk:
-                    translated_parts.append(translate_single_chunk(current_chunk.strip()))
+                    translated_parts.append(translate_single_chunk(current_chunk.strip(), target_lang))
                     current_chunk = full_sentence
                 else:
                     # Single sentence too long, translate as-is
-                    translated_parts.append(translate_single_chunk(full_sentence.strip()))
+                    translated_parts.append(translate_single_chunk(full_sentence.strip(), target_lang))
             else:
                 current_chunk += full_sentence
         
         if current_chunk:
-            translated_parts.append(translate_single_chunk(current_chunk.strip()))
+            translated_parts.append(translate_single_chunk(current_chunk.strip(), target_lang))
         
         return " ".join(translated_parts)
     else:
-        return translate_single_chunk(text)
+        return translate_single_chunk(text, target_lang)
 
 # === Translation Corrections Dictionary ===
 TRANSLATION_CORRECTIONS = {
@@ -99,7 +115,7 @@ def apply_translation_corrections(text, corrections_dict):
     
     return corrected
 
-def translate_single_chunk(text):
+def translate_single_chunk(text, target_lang=TARGET_LANG):
     """Translate a single chunk with error handling and corrections"""
     try:
         log_text = text[:50] + "..." if len(text) > 50 else text
@@ -108,7 +124,7 @@ def translate_single_chunk(text):
         encoded = tokenizer(text, return_tensors="pt", truncation=True, max_length=256).to(device)
         generated = model.generate(
             **encoded,
-            forced_bos_token_id=tokenizer.lang_code_to_id[TARGET_LANG],
+            forced_bos_token_id=tokenizer.lang_code_to_id[target_lang],
             max_length=400,  # Increased max length
             num_beams=3,     # Better quality
             early_stopping=True,
@@ -319,7 +335,7 @@ def translate_html_robust(html, translator_func, log_callback):
         log_callback(f"[ERROR] All strategies failed: {e}")
         return html
 
-def translate_json_fields(data, translator_func, log_callback, translated_flags=None, current_path="root"):
+def translate_json_fields(data, translator_func, log_callback, target_lang, translated_flags=None, current_path="root"):
     if translated_flags is None:
         translated_flags = set()
 
@@ -347,9 +363,9 @@ def translate_json_fields(data, translator_func, log_callback, translated_flags=
                 try:
                     original_value = value
                     if "<" in value and ">" in value:
-                        translated = translate_html_robust(value, translator_func, log_callback)
+                        translated = translate_html_robust(value, lambda x: translator_func(x, target_lang), log_callback)
                     else:
-                        translated = translator_func(value)
+                        translated = translator_func(value, target_lang)
                         log_callback(f"[FIELD] {value[:50]}... → {translated[:50]}...")
                     
                     # Additional validation
@@ -380,9 +396,9 @@ def translate_json_fields(data, translator_func, log_callback, translated_flags=
                                     try:
                                         log_callback(f"[DEBUG] Translating answer text: {orig[:60]}...")
                                         if "<" in orig and ">" in orig:
-                                            translated = translate_html_robust(orig, translator_func, log_callback)
+                                            translated = translate_html_robust(orig, lambda x: translator_func(x, target_lang), log_callback)
                                         else:
-                                            translated = translator_func(orig)
+                                            translated = translator_func(orig, target_lang)
                                         
                                         if len(translated.strip()) >= 3:
                                             answer["text"] = translated
@@ -398,7 +414,7 @@ def translate_json_fields(data, translator_func, log_callback, translated_flags=
                             log_callback(f"[DEBUG] Answer {idx} has no 'text' field")
                         
                         # Also recursively process the rest of the answer object (for nested structures)
-                        translate_json_fields(answer, translator_func, log_callback, translated_flags, answer_path)
+                        translate_json_fields(answer, translator_func, log_callback, target_lang, translated_flags, answer_path)
                     else:
                         log_callback(f"[DEBUG] Answer {idx} is not a dict: {type(answer)}")
                 continue
@@ -409,24 +425,24 @@ def translate_json_fields(data, translator_func, log_callback, translated_flags=
                 for idx, question in enumerate(value):
                     question_path = f"{path}[{idx}]"
                     log_callback(f"[DEBUG] Processing question {idx} at {question_path}")
-                    translate_json_fields(question, translator_func, log_callback, translated_flags, question_path)
+                    translate_json_fields(question, translator_func, log_callback, target_lang, translated_flags, question_path)
                 continue
 
             # Regular recursive processing for other nested structures
             if isinstance(value, (dict, list)):
-                translate_json_fields(value, translator_func, log_callback, translated_flags, path)
+                translate_json_fields(value, translator_func, log_callback, target_lang, translated_flags, path)
 
     elif isinstance(data, list):
         for idx, item in enumerate(data):
             path = f"{current_path}[{idx}]"
             if isinstance(item, (dict, list)):
-                translate_json_fields(item, translator_func, log_callback, translated_flags, path)
+                translate_json_fields(item, translator_func, log_callback, target_lang, translated_flags, path)
             elif isinstance(item, str) and path not in translated_flags:
                 try:
                     if "<" in item and ">" in item:
-                        translated = translate_html_robust(item, translator_func, log_callback)
+                        translated = translate_html_robust(item, lambda x: translator_func(x, target_lang), log_callback)
                     else:
-                        translated = translator_func(item)
+                        translated = translator_func(item, target_lang)
                     
                     if len(translated.strip()) >= 3:
                         data[idx] = translated
@@ -437,14 +453,137 @@ def translate_json_fields(data, translator_func, log_callback, translated_flags=
                 except Exception as e:
                     log_callback(f"[WARN] Couldn't translate list item at {path}: {e}")
 
-def translate_h5p(input_h5p, output_h5p, log_callback, export_raw=False):
+def fix_moodle_h5p_for_lumi(input_h5p, log_callback):
+    """Fix Moodle H5P files for Lumi compatibility by removing missing library references"""
+    temp_dir = "temp_lumi_fix"
+    
+    if os.path.exists(temp_dir):
+        shutil.rmtree(temp_dir)
+    
+    # Extract H5P file
+    with zipfile.ZipFile(input_h5p, 'r') as zip_ref:
+        zip_ref.extractall(temp_dir)
+    
+    log_callback("[LUMI-FIX] Checking for missing library references...")
+    
+    # Load main H5P metadata
+    h5p_json_path = os.path.join(temp_dir, "h5p.json")
+    content_json_path = os.path.join(temp_dir, "content", "content.json")
+    
+    fixed_anything = False
+    
+    # Fix h5p.json - remove references to missing libraries
+    if os.path.exists(h5p_json_path):
+        with open(h5p_json_path, 'r', encoding='utf-8') as f:
+            h5p_json = json.load(f)
+        
+        # Check what library folders actually exist
+        existing_libraries = set()
+        for item in os.listdir(temp_dir):
+            if os.path.isdir(os.path.join(temp_dir, item)) and item not in ['content', 'temp_lumi_fix']:
+                existing_libraries.add(item)
+        
+        log_callback(f"[LUMI-FIX] Found library folders: {existing_libraries}")
+        
+        # Remove missing dependencies
+        if "preloadedDependencies" in h5p_json:
+            original_deps = h5p_json["preloadedDependencies"][:]
+            h5p_json["preloadedDependencies"] = []
+            
+            for dep in original_deps:
+                lib_folder = f"{dep['machineName']}-{dep['majorVersion']}.{dep['minorVersion']}"
+                if lib_folder in existing_libraries:
+                    h5p_json["preloadedDependencies"].append(dep)
+                    log_callback(f"[LUMI-FIX] Kept dependency: {lib_folder}")
+                else:
+                    log_callback(f"[LUMI-FIX] Removed missing dependency: {lib_folder}")
+                    fixed_anything = True
+        
+        # Same for editor dependencies
+        if "editorDependencies" in h5p_json:
+            original_deps = h5p_json["editorDependencies"][:]
+            h5p_json["editorDependencies"] = []
+            
+            for dep in original_deps:
+                lib_folder = f"{dep['machineName']}-{dep['majorVersion']}.{dep['minorVersion']}"
+                if lib_folder in existing_libraries:
+                    h5p_json["editorDependencies"].append(dep)
+                else:
+                    log_callback(f"[LUMI-FIX] Removed missing editor dependency: {lib_folder}")
+                    fixed_anything = True
+        
+        # Save fixed h5p.json
+        with open(h5p_json_path, 'w', encoding='utf-8') as f:
+            json.dump(h5p_json, f, ensure_ascii=False, indent=2)
+    
+    # Fix content.json - remove showWhen and other editor-specific fields
+    if os.path.exists(content_json_path):
+        with open(content_json_path, 'r', encoding='utf-8') as f:
+            content = json.load(f)
+        
+        def remove_editor_fields_recursively(obj, path=""):
+            nonlocal fixed_anything
+            if isinstance(obj, dict):
+                keys_to_remove = []
+                for key, value in obj.items():
+                    current_path = f"{path}/{key}" if path else key
+                    # Remove editor-specific fields
+                    if key in ["showWhen", "widget", "importance", "description"]:
+                        keys_to_remove.append(key)
+                        log_callback(f"[LUMI-FIX] Removing editor field: {current_path}")
+                        fixed_anything = True
+                    else:
+                        remove_editor_fields_recursively(value, current_path)
+                
+                for key in keys_to_remove:
+                    del obj[key]
+                    
+            elif isinstance(obj, list):
+                for i, item in enumerate(obj):
+                    remove_editor_fields_recursively(item, f"{path}[{i}]")
+        
+        remove_editor_fields_recursively(content)
+        
+        # Save fixed content.json
+        with open(content_json_path, 'w', encoding='utf-8') as f:
+            json.dump(content, f, ensure_ascii=False, indent=2)
+    
+    if fixed_anything:
+        # Create fixed H5P file
+        fixed_filename = input_h5p.replace('.h5p', '_lumi_fixed.h5p')
+        with zipfile.ZipFile(fixed_filename, 'w', zipfile.ZIP_DEFLATED) as zipf:
+            for root, _, files in os.walk(temp_dir):
+                for file in files:
+                    file_path = os.path.join(root, file)
+                    arcname = os.path.relpath(file_path, temp_dir)
+                    zipf.write(file_path, arcname)
+        
+        log_callback(f"[✅] Lumi compatibility fixes applied: {fixed_filename}")
+        shutil.rmtree(temp_dir)
+        return fixed_filename
+    else:
+        log_callback("[LUMI-FIX] No fixes needed - file should work in Lumi as-is")
+        shutil.rmtree(temp_dir)
+        return input_h5p
+
+def translate_h5p(input_h5p, output_h5p, log_callback, source_lang, target_lang, export_raw=False, fix_for_lumi=False):
+    # Update tokenizer source language
+    global tokenizer
+    tokenizer.src_lang = source_lang
+    
+    # Apply Lumi compatibility fixes first if requested
+    working_file = input_h5p
+    if fix_for_lumi:
+        log_callback("[INFO] Applying Lumi compatibility fixes...")
+        working_file = fix_moodle_h5p_for_lumi(input_h5p, log_callback)
+    
     temp_dir = "temp_h5p"
     content_json_path = os.path.join(temp_dir, "content", "content.json")
 
     if os.path.exists(temp_dir):
         shutil.rmtree(temp_dir)
 
-    with zipfile.ZipFile(input_h5p, 'r') as zip_ref:
+    with zipfile.ZipFile(working_file, 'r') as zip_ref:
         zip_ref.extractall(temp_dir)
     log_callback("[OK] Extracted H5P")
 
@@ -452,7 +591,7 @@ def translate_h5p(input_h5p, output_h5p, log_callback, export_raw=False):
         content = json.load(f)
 
     log_callback("[INFO] Starting translation...")
-    translate_json_fields(content, translate_local_ai, log_callback)
+    translate_json_fields(content, translate_local_ai, log_callback, target_lang)
 
     with open(content_json_path, 'w', encoding='utf-8') as f:
         json.dump(content, f, ensure_ascii=False, indent=2)
@@ -469,30 +608,124 @@ def translate_h5p(input_h5p, output_h5p, log_callback, export_raw=False):
 
     log_callback(f"[✅] Translated and saved: {output_h5p}")
     shutil.rmtree(temp_dir)
+    
+    # Clean up temporary fixed file if we created one
+    if fix_for_lumi and working_file != input_h5p and os.path.exists(working_file):
+        os.remove(working_file)
+        log_callback("[INFO] Cleaned up temporary Lumi-fixed file")
 
 # === GUI ===
 class TranslatorGUI:
     def __init__(self, root):
         self.root = root
-        self.root.title("H5P Translator (Local AI) - Robust Version")
-        self.root.geometry("800x650")
+        self.root.title("H5P Translator (Local AI) - Enhanced Version")
+        self.root.geometry("900x750")
 
         self.file_path = tk.StringVar()
+        self.output_folder = tk.StringVar()
+        self.source_lang = tk.StringVar(value="en")
+        self.target_lang = tk.StringVar(value="de")
         self.export_raw = tk.BooleanVar()
+        self.fix_for_lumi = tk.BooleanVar()
         self.log_file_path = "translation-log.txt"
 
-        tk.Button(root, text="Select .h5p File", command=self.select_file).pack(pady=5)
-        tk.Entry(root, textvariable=self.file_path, width=100).pack()
+        self.setup_ui()
 
-        tk.Checkbutton(root, text="Export translated folder as ZIP (for debugging)", variable=self.export_raw).pack(pady=5)
+    def setup_ui(self):
+    # Initialize language display variables first
+        self.source_lang_display = tk.StringVar()
+        self.target_lang_display = tk.StringVar()
+    
+    # File selection
+        file_frame = tk.Frame(self.root)
+        file_frame.pack(pady=5, fill="x", padx=10)
+    
+        tk.Label(file_frame, text="Input H5P File:", font=("Arial", 10, "bold")).pack(anchor="w")
+        input_frame = tk.Frame(file_frame)
+        input_frame.pack(fill="x", pady=(2, 5))
+    
+        tk.Entry(input_frame, textvariable=self.file_path, width=80).pack(side="left", fill="x", expand=True)
+        tk.Button(input_frame, text="Browse", command=self.select_file).pack(side="right", padx=(5, 0))
 
-        tk.Button(root, text="Translate Now", command=self.start_translation).pack(pady=5)
+        # Output folder selection
+        tk.Label(file_frame, text="Output Folder:", font=("Arial", 10, "bold")).pack(anchor="w")
+        output_frame = tk.Frame(file_frame)
+        output_frame.pack(fill="x", pady=(2, 10))
+    
+        tk.Entry(output_frame, textvariable=self.output_folder, width=80).pack(side="left", fill="x", expand=True)
+        tk.Button(output_frame, text="Browse", command=self.select_output_folder).pack(side="right", padx=(5, 0))
 
-        self.log = scrolledtext.ScrolledText(root, height=25, width=100)
-        self.log.pack(pady=10)
+        # Language selection
+        lang_frame = tk.Frame(self.root)
+        lang_frame.pack(pady=5, fill="x", padx=10)
+    
+        tk.Label(lang_frame, text="Language Settings:", font=("Arial", 10, "bold")).pack(anchor="w")
+    
+        lang_controls = tk.Frame(lang_frame)
+        lang_controls.pack(fill="x", pady=(5, 10))
+    
+    # Source language
+        source_frame = tk.Frame(lang_controls)
+        source_frame.pack(side="left", padx=(0, 20))
+        tk.Label(source_frame, text="From:").pack()
+        source_combo = tk.OptionMenu(source_frame, self.source_lang, *SUPPORTED_LANGUAGES.keys())
+        source_combo.config(width=8)
+        source_combo.pack()
+        tk.Label(source_frame, textvariable=self.source_lang_display, font=("Arial", 8)).pack()
+    
+    # Arrow
+        tk.Label(lang_controls, text="→", font=("Arial", 16)).pack(side="left")
+    
+    # Target language  
+        target_frame = tk.Frame(lang_controls)
+        target_frame.pack(side="left", padx=(20, 0))
+        tk.Label(target_frame, text="To:").pack()
+        target_combo = tk.OptionMenu(target_frame, self.target_lang, *SUPPORTED_LANGUAGES.keys())
+        target_combo.config(width=8)
+        target_combo.pack()
+        tk.Label(target_frame, textvariable=self.target_lang_display, font=("Arial", 8)).pack()
 
-        self.status = tk.Label(root, text="Idle", fg="blue")
-        self.status.pack()
+    # Options
+        options_frame = tk.Frame(self.root)
+        options_frame.pack(pady=5, fill="x", padx=10)
+    
+        tk.Label(options_frame, text="Options:", font=("Arial", 10, "bold")).pack(anchor="w")
+        tk.Checkbutton(options_frame, text="Fix for Lumi compatibility (removes missing library references)", 
+                  variable=self.fix_for_lumi).pack(anchor="w", pady=2)
+        tk.Checkbutton(options_frame, text="Export translated folder as ZIP (for debugging)", 
+                  variable=self.export_raw).pack(anchor="w", pady=2)
+
+    # Translate button
+        tk.Button(self.root, text="🔄 Translate Now", command=self.start_translation, 
+                font=("Arial", 12, "bold"), bg="#4CAF50", fg="white", pady=10).pack(pady=15)
+
+    # Log area
+        log_frame = tk.Frame(self.root)
+        log_frame.pack(pady=5, fill="both", expand=True, padx=10)
+    
+        tk.Label(log_frame, text="Translation Log:", font=("Arial", 10, "bold")).pack(anchor="w")
+        self.log = scrolledtext.ScrolledText(log_frame, height=20, width=100)
+        self.log.pack(fill="both", expand=True, pady=(5, 0))
+
+    # Status
+        self.status = tk.Label(self.root, text="Ready", fg="blue", font=("Arial", 10, "bold"))
+        self.status.pack(pady=(5, 10))
+
+    # Set up initial language displays and bind change events
+        self.update_language_displays()
+        self.source_lang.trace("w", lambda *args: self.update_language_displays())
+        self.target_lang.trace("w", lambda *args: self.update_language_displays())
+
+    def update_language_displays(self):
+        source_code = self.source_lang.get()
+        target_code = self.target_lang.get()
+        self.source_lang_display.set(SUPPORTED_LANGUAGES.get(source_code, source_code))
+        self.target_lang_display.set(SUPPORTED_LANGUAGES.get(target_code, target_code))
+
+    def select_output_folder(self):
+        folder = filedialog.askdirectory(title="Select Output Folder")
+        if folder:
+            self.output_folder.set(folder)
 
     def log_msg(self, message):
         self.log.insert(tk.END, message + "\n")
@@ -512,23 +745,41 @@ class TranslatorGUI:
             messagebox.showerror("Error", "Please select a valid .h5p file.")
             return
 
-        output_file = file.replace(".h5p", "_translated.h5p")
+        # Determine output file path
+        if self.output_folder.get():
+            filename = os.path.basename(file)
+            name_without_ext = filename.replace(".h5p", "")
+            source_lang_name = SUPPORTED_LANGUAGES.get(self.source_lang.get(), self.source_lang.get())
+            target_lang_name = SUPPORTED_LANGUAGES.get(self.target_lang.get(), self.target_lang.get())
+            output_file = os.path.join(self.output_folder.get(), f"{name_without_ext}_{source_lang_name}_to_{target_lang_name}.h5p")
+        else:
+            output_file = file.replace(".h5p", "_translated.h5p")
+
         if os.path.exists(output_file):
-            overwrite = messagebox.askyesno("Overwrite?", f"{output_file} already exists. Overwrite?")
+            overwrite = messagebox.askyesno("Overwrite?", f"{os.path.basename(output_file)} already exists. Overwrite?")
             if not overwrite:
                 self.status.config(text="Cancelled", fg="orange")
                 return
+
+        # Validate language selection
+        if self.source_lang.get() == self.target_lang.get():
+            messagebox.showwarning("Warning", "Source and target languages are the same!")
+            return
 
         self.status.config(text="Translating...", fg="black")
         self.log.delete("1.0", tk.END)
         with open(self.log_file_path, "w", encoding="utf-8") as f:
             f.write(f"Translating file: {file}\n")
+            f.write(f"From {SUPPORTED_LANGUAGES.get(self.source_lang.get())} to {SUPPORTED_LANGUAGES.get(self.target_lang.get())}\n")
+            f.write(f"Output: {output_file}\n\n")
 
-        threading.Thread(target=self.run_translation, args=(file, output_file, self.export_raw.get())).start()
+        threading.Thread(target=self.run_translation, args=(file, output_file, self.source_lang.get(), 
+                                                           self.target_lang.get(), self.export_raw.get(), 
+                                                           self.fix_for_lumi.get())).start()
 
-    def run_translation(self, input_file, output_file, export_raw):
+    def run_translation(self, input_file, output_file, source_lang, target_lang, export_raw, fix_for_lumi):
         try:
-            translate_h5p(input_file, output_file, self.log_msg, export_raw)
+            translate_h5p(input_file, output_file, self.log_msg, source_lang, target_lang, export_raw, fix_for_lumi)
             self.status.config(text="✅ Translation complete", fg="green")
         except Exception as e:
             self.log_msg(f"[ERROR] {e}")
